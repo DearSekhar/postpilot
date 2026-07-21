@@ -1,0 +1,112 @@
+import json
+import os
+from typing import Optional, TypedDict
+
+from langgraph.graph import StateGraph, END
+from pydantic import ValidationError
+
+from agent import config, diagram_gen, email_render, llm_provider
+from agent.models import PostDraft
+
+SYSTEM_PROMPT_TEMPLATE = """You are an assistant that writes short, sharp LinkedIn posts \
+for a working software/AI engineer about AI and Azure topics. You are NOT a marketer — \
+avoid buzzwords, hype, and generic "excited to share" openers.
+
+Style preferences you must follow:
+- Tone: {tone}
+- Keep body_text under {max_words} words.
+- Topics to avoid: {avoid_topics}
+
+Additional notes from past feedback (follow these closely, they reflect real corrections):
+{notes}
+
+Respond with ONLY a JSON object, no markdown fences, matching exactly this shape:
+{{
+  "topic": "short topic name",
+  "body_text": "the LinkedIn post text",
+  "hashtags": ["upto5", "shorttags"],
+  "diagram": {{
+    "style": "architecture" or "concept",
+    "steps": [
+      {{"title": "short label", "subtitle": "optional short line"}}
+    ]
+  }}
+}}
+Use "architecture" style for topics about a specific Azure/AI service or pipeline \
+(2-4 steps, boxes flowing left to right). Use "concept" style for softer, mental-model \
+style topics (2-4 steps, simpler labels, no subtitles needed).
+"""
+
+USER_PROMPT = "Generate today's post. Pick a topic you have not covered before, related to AI or Azure."
+
+
+class AgentState(TypedDict, total=False):
+    preferences: dict
+    draft: Optional[PostDraft]
+    diagram_svg: Optional[str]
+    html_preview: Optional[str]
+
+
+def load_preferences(state: AgentState) -> AgentState:
+    with open(config.PREFERENCES_PATH, "r") as f:
+        prefs = json.load(f)
+    return {**state, "preferences": prefs}
+
+
+def generate_draft(state: AgentState) -> AgentState:
+    prefs = state["preferences"]
+    system_prompt = SYSTEM_PROMPT_TEMPLATE.format(
+        tone=prefs.get("tone", "direct, practical"),
+        max_words=prefs.get("max_words", 120),
+        avoid_topics=", ".join(prefs.get("avoid_topics", [])) or "none",
+        notes="\n".join(f"- {n}" for n in prefs.get("notes", [])) or "none yet",
+    )
+
+    last_error = None
+    for attempt in range(2):  # one retry if the model returns malformed JSON/schema
+        try:
+            raw = llm_provider.generate_json(system_prompt, USER_PROMPT)
+            draft = PostDraft.model_validate(raw)
+            return {**state, "draft": draft}
+        except (ValueError, ValidationError) as e:
+            last_error = e
+    raise RuntimeError(f"Failed to generate a valid draft after retries: {last_error}")
+
+
+def render_diagram(state: AgentState) -> AgentState:
+    draft = state["draft"]
+    colors = state["preferences"].get("diagram_colors", ["#2563eb", "#0d9488", "#ea580c"])
+    svg = diagram_gen.render_svg(draft.diagram, colors)
+    return {**state, "diagram_svg": svg}
+
+
+def render_preview(state: AgentState) -> AgentState:
+    html = email_render.build_html(state["draft"], state["diagram_svg"])
+    return {**state, "html_preview": html}
+
+
+def save_outputs(state: AgentState) -> AgentState:
+    os.makedirs(config.OUTPUT_DIR, exist_ok=True)
+    with open(os.path.join(config.OUTPUT_DIR, "draft.json"), "w") as f:
+        f.write(state["draft"].model_dump_json(indent=2))
+    with open(os.path.join(config.OUTPUT_DIR, "preview.html"), "w") as f:
+        f.write(state["html_preview"])
+    return state
+
+
+def build_graph():
+    graph = StateGraph(AgentState)
+    graph.add_node("load_preferences", load_preferences)
+    graph.add_node("generate_draft", generate_draft)
+    graph.add_node("render_diagram", render_diagram)
+    graph.add_node("render_preview", render_preview)
+    graph.add_node("save_outputs", save_outputs)
+
+    graph.set_entry_point("load_preferences")
+    graph.add_edge("load_preferences", "generate_draft")
+    graph.add_edge("generate_draft", "render_diagram")
+    graph.add_edge("render_diagram", "render_preview")
+    graph.add_edge("render_preview", "save_outputs")
+    graph.add_edge("save_outputs", END)
+
+    return graph.compile()

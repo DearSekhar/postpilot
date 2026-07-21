@@ -1,0 +1,8 @@
+{
+  "max_words": 120,
+  "tone": "direct, practical, no corporate fluff or forced enthusiasm",
+  "diagram_colors": ["#2563eb", "#0d9488", "#ea580c"],
+  "diagram_style_default": "concept",
+  "avoid_topics": [],
+  "notes": []
+}
