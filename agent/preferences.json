@@ -1,8 +1,12 @@
 {
-  "max_words": 120,
-  "tone": "direct, practical, no corporate fluff or forced enthusiasm",
+  "min_words": 100,
+  "max_words": 350,
+  "tone": "professional but written like a practicing engineer sharing real experience, not a marketing brochure",
+  "structure_guidance": "Cover, in order: (1) a real-world problem or pain point this addresses, (2) brief context on the approach or technology, (3) a concrete use case or scenario where this applies, (4) a clear takeaway of why it matters. Do not just describe a feature in the abstract.",
   "diagram_colors": ["#2563eb", "#0d9488", "#ea580c"],
   "diagram_style_default": "concept",
   "avoid_topics": [],
-  "notes": []
+  "notes": [
+    "2026-07-21: First draft was only 27 words and read like a bare feature description with no context. Needs real-world problem framing, background, and a concrete use case, not just 'X offers Y'."
+  ]
 }

@@ -8,13 +8,14 @@ from pydantic import ValidationError
 from agent import config, diagram_gen, email_render, llm_provider
 from agent.models import PostDraft
 
-SYSTEM_PROMPT_TEMPLATE = """You are an assistant that writes short, sharp LinkedIn posts \
+SYSTEM_PROMPT_TEMPLATE = """You are an assistant that writes short or Medium, sharp LinkedIn posts \
 for a working software/AI engineer about AI and Azure topics. You are NOT a marketer — \
 avoid buzzwords, hype, and generic "excited to share" openers.
 
 Style preferences you must follow:
 - Tone: {tone}
-- Keep body_text under {max_words} words.
+- body_text must be between {min_words} and {max_words} words. Do not fall short of the minimum.
+- Structure: {structure_guidance}
 - Topics to avoid: {avoid_topics}
 
 Additional notes from past feedback (follow these closely, they reflect real corrections):
@@ -56,11 +57,15 @@ def load_preferences(state: AgentState) -> AgentState:
 def generate_draft(state: AgentState) -> AgentState:
     prefs = state["preferences"]
     system_prompt = SYSTEM_PROMPT_TEMPLATE.format(
-        tone=prefs.get("tone", "direct, practical"),
-        max_words=prefs.get("max_words", 120),
-        avoid_topics=", ".join(prefs.get("avoid_topics", [])) or "none",
-        notes="\n".join(f"- {n}" for n in prefs.get("notes", [])) or "none yet",
-    )
+            tone=prefs.get("tone", "direct, practical"),
+            min_words=prefs.get("min_words", 80),
+            max_words=prefs.get("max_words", 120),
+            structure_guidance=prefs.get("structure_guidance", "no specific structure required"),
+            avoid_topics=", ".join(prefs.get("avoid_topics", [])) or "none",
+            notes="\n".join(f"- {n}" for n in prefs.get("notes", [])) or "none yet",
+        )    
+
+    
 
     last_error = None
     for attempt in range(2):  # one retry if the model returns malformed JSON/schema
