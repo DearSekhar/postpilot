@@ -57,13 +57,13 @@ def load_preferences(state: AgentState) -> AgentState:
 def generate_draft(state: AgentState) -> AgentState:
     prefs = state["preferences"]
     system_prompt = SYSTEM_PROMPT_TEMPLATE.format(
-            tone=prefs.get("tone", "direct, practical"),
-            min_words=prefs.get("min_words", 80),
-            max_words=prefs.get("max_words", 120),
-            structure_guidance=prefs.get("structure_guidance", "no specific structure required"),
-            avoid_topics=", ".join(prefs.get("avoid_topics", [])) or "none",
-            notes="\n".join(f"- {n}" for n in prefs.get("notes", [])) or "none yet",
-        )    
+        tone=prefs["tone"],
+        min_words=prefs["min_words"],
+        max_words=prefs["max_words"],
+        structure_guidance=prefs["structure_guidance"],
+        avoid_topics=", ".join(prefs.get("avoid_topics", [])) or "none",
+        notes="\n".join(f"- {n}" for n in prefs.get("notes", [])) or "none yet",
+    )        
 
     
 
@@ -99,19 +99,36 @@ def save_outputs(state: AgentState) -> AgentState:
     return state
 
 
+# def build_graph():
+#     graph = StateGraph(AgentState)
+#     graph.add_node("load_preferences", load_preferences)
+#     graph.add_node("generate_draft", generate_draft)
+#     graph.add_node("render_diagram", render_diagram)
+#     graph.add_node("render_preview", render_preview)
+#     graph.add_node("save_outputs", save_outputs)
+
+#     graph.set_entry_point("load_preferences")
+#     graph.add_edge("load_preferences", "generate_draft")
+#     graph.add_edge("generate_draft", "render_diagram")
+#     graph.add_edge("render_diagram", "render_preview")
+#     graph.add_edge("render_preview", "save_outputs")
+#     graph.add_edge("save_outputs", END)
+
+#     return graph.compile()
+
 def build_graph():
     graph = StateGraph(AgentState)
-    graph.add_node("load_preferences", load_preferences)
-    graph.add_node("generate_draft", generate_draft)
-    graph.add_node("render_diagram", render_diagram)
-    graph.add_node("render_preview", render_preview)
-    graph.add_node("save_outputs", save_outputs)
+    graph.add_node("load_style_preferences", load_preferences)
+    graph.add_node("draft_post_content", generate_draft)
+    graph.add_node("build_diagram_svg", render_diagram)
+    graph.add_node("compose_preview_email", render_preview)
+    graph.add_node("persist_outputs", save_outputs)
 
-    graph.set_entry_point("load_preferences")
-    graph.add_edge("load_preferences", "generate_draft")
-    graph.add_edge("generate_draft", "render_diagram")
-    graph.add_edge("render_diagram", "render_preview")
-    graph.add_edge("render_preview", "save_outputs")
-    graph.add_edge("save_outputs", END)
+    graph.set_entry_point("load_style_preferences")
+    graph.add_edge("load_style_preferences", "draft_post_content")
+    graph.add_edge("draft_post_content", "build_diagram_svg")
+    graph.add_edge("build_diagram_svg", "compose_preview_email")
+    graph.add_edge("compose_preview_email", "persist_outputs")
+    graph.add_edge("persist_outputs", END)
 
-    return graph.compile()
+    return graph.compile()    
