@@ -1,0 +1,10 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "TOKEN_SIGNING_SECRET": "replace-with-a-long-random-string",
+    "LINKEDIN_ACCESS_TOKEN": "replace-with-your-linkedin-access-token",
+    "LINKEDIN_API_VERSION": "202506"
+  }
+}

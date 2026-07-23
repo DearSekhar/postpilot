@@ -5,7 +5,7 @@ from typing import Optional, TypedDict
 from langgraph.graph import StateGraph, END
 from pydantic import ValidationError
 
-from agent import config, diagram_gen, email_render, llm_provider
+from agent import config, diagram_gen, email_render, llm_provider, token_utils
 from agent.models import PostDraft
 
 SYSTEM_PROMPT_TEMPLATE = """You are an assistant that writes short or Medium, sharp LinkedIn posts \
@@ -21,7 +21,10 @@ Style preferences you must follow:
 Additional notes from past feedback (follow these closely, they reflect real corrections):
 {notes}
 
-Respond with ONLY a JSON object, no markdown fences, matching exactly this shape:
+Respond with ONLY a JSON object, no markdown fences, no text before or after it. \
+The entire response must be valid, parseable JSON — this means any paragraph break \
+inside body_text must be written as the two characters backslash-n backslash-n (\\n\\n), \
+NOT an actual line break. Do not press enter inside string values. Matching exactly this shape:
 {{
   "topic": "short topic name",
   "body_text": "the LinkedIn post text",
@@ -37,6 +40,9 @@ Use "architecture" style for topics about a specific Azure/AI service or pipelin
 (2-4 steps, boxes flowing left to right). Use "concept" style for softer, mental-model \
 style topics (2-4 steps, simpler labels, no subtitles needed).
 """
+
+
+
 
 USER_PROMPT = "Generate today's post. Pick a topic you have not covered before, related to AI or Azure."
 
@@ -85,9 +91,19 @@ def render_diagram(state: AgentState) -> AgentState:
     return {**state, "diagram_svg": svg}
 
 
+# def render_preview(state: AgentState) -> AgentState:
+#     html = email_render.build_html(state["draft"], state["diagram_svg"])
+#     return {**state, "html_preview": html}
+
 def render_preview(state: AgentState) -> AgentState:
-    html = email_render.build_html(state["draft"], state["diagram_svg"])
-    return {**state, "html_preview": html}
+    draft = state["draft"]
+    approve_url = "#"
+    if config.TOKEN_SIGNING_SECRET:
+        approve_url = token_utils.build_approve_url(
+            draft, config.APPROVE_BASE_URL, config.TOKEN_SIGNING_SECRET
+        )
+    html = email_render.build_html(draft, state["diagram_svg"], approve_url)
+    return {**state, "html_preview": html}    
 
 
 def save_outputs(state: AgentState) -> AgentState:

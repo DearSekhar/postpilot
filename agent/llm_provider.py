@@ -51,6 +51,37 @@ def _call_gemini(system_prompt: str, user_prompt: str) -> str:
     resp.raise_for_status()
     return resp.json()["candidates"][0]["content"]["parts"][0]["text"]
 
+def _escape_newlines_in_strings(text: str) -> str:
+    """
+    Models sometimes emit literal line breaks inside a JSON string value
+    (e.g. for paragraph breaks) instead of the escaped \n JSON requires.
+    Walk the text tracking whether we're inside a quoted string, and fix
+    only newlines found there.
+    """
+    result = []
+    in_string = False
+    escape = False
+    for ch in text:
+        if escape:
+            result.append(ch)
+            escape = False
+            continue
+        if ch == "\\":
+            result.append(ch)
+            escape = True
+            continue
+        if ch == '"':
+            in_string = not in_string
+            result.append(ch)
+            continue
+        if in_string and ch == "\n":
+            result.append("\\n")
+            continue
+        if in_string and ch == "\r":
+            continue
+        result.append(ch)
+    return "".join(result)
+
 
 def generate_json(system_prompt: str, user_prompt: str) -> dict:
     """Call the configured provider and parse the response as JSON."""
@@ -64,5 +95,10 @@ def generate_json(system_prompt: str, user_prompt: str) -> dict:
     cleaned = _strip_json_fences(raw)
     try:
         return json.loads(cleaned)
+    except json.JSONDecodeError:
+        pass
+
+    try:
+        return json.loads(_escape_newlines_in_strings(cleaned))
     except json.JSONDecodeError as e:
         raise ValueError(f"Model did not return valid JSON:\n{raw}") from e

@@ -12,6 +12,9 @@ GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
+TOKEN_SIGNING_SECRET = os.getenv("TOKEN_SIGNING_SECRET")
+APPROVE_BASE_URL = os.getenv("APPROVE_BASE_URL", "http://localhost:7071/api")
+
 PREFERENCES_PATH = os.path.join(os.path.dirname(__file__), "preferences.json")
 OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "output")
 
