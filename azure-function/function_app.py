@@ -42,8 +42,49 @@ def _get_person_urn() -> str:
     return f"urn:li:person:{member_id}"
 
 
-def _publish_post(text: str) -> requests.Response:
+# def _publish_post(text: str) -> requests.Response:
+#     author_urn = _get_person_urn()
+#     return requests.post(
+#         "https://api.linkedin.com/rest/posts",
+#         headers={
+#             "Authorization": f"Bearer {LINKEDIN_ACCESS_TOKEN}",
+#             "Content-Type": "application/json",
+#             "X-Restli-Protocol-Version": "2.0.0",
+#             "LinkedIn-Version": LINKEDIN_API_VERSION,
+#         },
+#         json={
+#             "author": author_urn,
+#             "commentary": text,
+#             "visibility": "PUBLIC",
+#             "distribution": {
+#                 "feedDistribution": "MAIN_FEED",
+#                 "targetEntities": [],
+#                 "thirdPartyDistributionChannels": [],
+#             },
+#             "lifecycleState": "PUBLISHED",
+#             "isReshareDisabledByAuthor": False,
+#         },
+#         timeout=30,
+#     )
+
+
+def _publish_post(text: str, image_urn: str | None) -> requests.Response:
     author_urn = _get_person_urn()
+    body = {
+        "author": author_urn,
+        "commentary": text,
+        "visibility": "PUBLIC",
+        "distribution": {
+            "feedDistribution": "MAIN_FEED",
+            "targetEntities": [],
+            "thirdPartyDistributionChannels": [],
+        },
+        "lifecycleState": "PUBLISHED",
+        "isReshareDisabledByAuthor": False,
+    }
+    if image_urn:
+        body["content"] = {"media": {"id": image_urn, "altText": "Diagram illustrating the post topic"}}
+
     return requests.post(
         "https://api.linkedin.com/rest/posts",
         headers={
@@ -52,21 +93,9 @@ def _publish_post(text: str) -> requests.Response:
             "X-Restli-Protocol-Version": "2.0.0",
             "LinkedIn-Version": LINKEDIN_API_VERSION,
         },
-        json={
-            "author": author_urn,
-            "commentary": text,
-            "visibility": "PUBLIC",
-            "distribution": {
-                "feedDistribution": "MAIN_FEED",
-                "targetEntities": [],
-                "thirdPartyDistributionChannels": [],
-            },
-            "lifecycleState": "PUBLISHED",
-            "isReshareDisabledByAuthor": False,
-        },
+        json=body,
         timeout=30,
     )
-
 
 def _html(body: str, status_code: int = 200) -> func.HttpResponse:
     return func.HttpResponse(
@@ -96,10 +125,12 @@ def approve(req: func.HttpRequest) -> func.HttpResponse:
     if time.time() > payload["expires_at"]:
         return _html("<h2>This link has expired</h2><p>Approve links are valid for 24 hours.</p>", 410)
 
+    
     hashtags_line = " ".join(f"#{h}" for h in payload.get("hashtags", []))
     full_text = f"{payload['body_text']}\n\n{hashtags_line}".strip()
+    image_urn = payload.get("image_urn")
 
-    resp = _publish_post(full_text)
+    resp = _publish_post(full_text, image_urn)    
 
     if resp.status_code == 201:
         return _html("<h2>&#9989; Posted to LinkedIn</h2><p>Check your profile to see it live.</p>")

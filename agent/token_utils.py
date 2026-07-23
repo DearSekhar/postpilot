@@ -21,12 +21,27 @@ def _sign(payload_b64: str, secret: str) -> str:
     return base64.urlsafe_b64encode(sig).decode().rstrip("=")
 
 
-def build_approve_url(draft: PostDraft, base_url: str, signing_secret: str) -> str:
+# def build_approve_url(draft: PostDraft, base_url: str, signing_secret: str) -> str:
+#     payload = {
+#         "body_text": draft.body_text,
+#         "hashtags": draft.hashtags,
+#         "expires_at": int(time.time()) + LINK_LIFETIME_SECONDS,
+#     }
+#     payload_json = json.dumps(payload, separators=(",", ":")).encode()
+#     data_b64 = base64.urlsafe_b64encode(payload_json).decode().rstrip("=")
+#     sig = _sign(data_b64, signing_secret)
+#     return f"{base_url.rstrip('/')}/approve?data={data_b64}&sig={sig}"
+
+def build_approve_url(
+    draft: PostDraft, base_url: str, signing_secret: str, image_urn: str | None = None
+) -> str:
     payload = {
         "body_text": draft.body_text,
         "hashtags": draft.hashtags,
         "expires_at": int(time.time()) + LINK_LIFETIME_SECONDS,
     }
+    if image_urn:
+        payload["image_urn"] = image_urn
     payload_json = json.dumps(payload, separators=(",", ":")).encode()
     data_b64 = base64.urlsafe_b64encode(payload_json).decode().rstrip("=")
     sig = _sign(data_b64, signing_secret)

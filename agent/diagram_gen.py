@@ -3,6 +3,8 @@ Turns a DiagramSpec into a plain, self-contained SVG string.
 No external services or system dependencies (like Graphviz) required —
 keeps this free and portable to run inside GitHub Actions later.
 """
+import cairosvg
+
 from agent.models import DiagramSpec
 
 BOX_W, BOX_H, GAP, MARGIN = 160, 56, 40, 40
@@ -65,6 +67,10 @@ def render_svg(spec: DiagramSpec, colors: list[str]) -> str:
   {loop_note}
 </svg>"""
 
+
+def svg_to_png(svg_string: str, width: int = 1200) -> bytes:
+    """Rasterizes the diagram for LinkedIn upload, which requires an actual image, not SVG."""
+    return cairosvg.svg2png(bytestring=svg_string.encode(), output_width=width)
 
 def _escape(text: str) -> str:
     return (

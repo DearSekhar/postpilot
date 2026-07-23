@@ -3,3 +3,4 @@ langchain-core>=0.3.0
 pydantic>=2.7.0
 requests>=2.32.0
 python-dotenv>=1.0.0
+cairosvg>=2.7.0

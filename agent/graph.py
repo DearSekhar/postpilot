@@ -5,8 +5,9 @@ from typing import Optional, TypedDict
 from langgraph.graph import StateGraph, END
 from pydantic import ValidationError
 
-from agent import config, diagram_gen, email_render, llm_provider, token_utils
 from agent.models import PostDraft
+from agent import config, diagram_gen, email_render, linkedin_image, llm_provider, token_utils
+
 
 SYSTEM_PROMPT_TEMPLATE = """You are an assistant that writes short or Medium, sharp LinkedIn posts \
 for a working software/AI engineer about AI and Azure topics. You are NOT a marketer — \
@@ -90,21 +91,45 @@ def render_diagram(state: AgentState) -> AgentState:
     svg = diagram_gen.render_svg(draft.diagram, colors)
     return {**state, "diagram_svg": svg}
 
+def upload_diagram(state: AgentState) -> AgentState:
+    """Uploads the diagram to LinkedIn now, so the approve token only needs a short URN.
+    If LinkedIn isn't configured, skip gracefully — post still works as text-only."""
+    if not config.LINKEDIN_ACCESS_TOKEN:
+        return {**state, "diagram_image_urn": None}
+    try:
+        png_bytes = diagram_gen.svg_to_png(state["diagram_svg"])
+        urn = linkedin_image.upload_diagram_image(
+            png_bytes, config.LINKEDIN_ACCESS_TOKEN, config.LINKEDIN_API_VERSION
+        )
+        return {**state, "diagram_image_urn": urn}
+    except Exception as e:
+        print(f"Warning: diagram upload failed, continuing text-only. {e}")
+        return {**state, "diagram_image_urn": None}
 
 # def render_preview(state: AgentState) -> AgentState:
 #     html = email_render.build_html(state["draft"], state["diagram_svg"])
 #     return {**state, "html_preview": html}
+
+# def render_preview(state: AgentState) -> AgentState:
+#     draft = state["draft"]
+#     approve_url = "#"
+#     if config.TOKEN_SIGNING_SECRET:
+#         approve_url = token_utils.build_approve_url(
+#             draft, config.APPROVE_BASE_URL, config.TOKEN_SIGNING_SECRET
+#         )
+#     html = email_render.build_html(draft, state["diagram_svg"], approve_url)
+#     return {**state, "html_preview": html}    
 
 def render_preview(state: AgentState) -> AgentState:
     draft = state["draft"]
     approve_url = "#"
     if config.TOKEN_SIGNING_SECRET:
         approve_url = token_utils.build_approve_url(
-            draft, config.APPROVE_BASE_URL, config.TOKEN_SIGNING_SECRET
+            draft, config.APPROVE_BASE_URL, config.TOKEN_SIGNING_SECRET,
+            image_urn=state.get("diagram_image_urn"),
         )
     html = email_render.build_html(draft, state["diagram_svg"], approve_url)
-    return {**state, "html_preview": html}    
-
+    return {**state, "html_preview": html}
 
 def save_outputs(state: AgentState) -> AgentState:
     os.makedirs(config.OUTPUT_DIR, exist_ok=True)
@@ -132,19 +157,38 @@ def save_outputs(state: AgentState) -> AgentState:
 
 #     return graph.compile()
 
+# def build_graph():
+#     graph = StateGraph(AgentState)
+#     graph.add_node("load_style_preferences", load_preferences)
+#     graph.add_node("draft_post_content", generate_draft)
+#     graph.add_node("build_diagram_svg", render_diagram)
+#     graph.add_node("compose_preview_email", render_preview)
+#     graph.add_node("persist_outputs", save_outputs)
+
+#     graph.set_entry_point("load_style_preferences")
+#     graph.add_edge("load_style_preferences", "draft_post_content")
+#     graph.add_edge("draft_post_content", "build_diagram_svg")
+#     graph.add_edge("build_diagram_svg", "compose_preview_email")
+#     graph.add_edge("compose_preview_email", "persist_outputs")
+#     graph.add_edge("persist_outputs", END)
+
+#     return graph.compile()    
+
 def build_graph():
     graph = StateGraph(AgentState)
     graph.add_node("load_style_preferences", load_preferences)
     graph.add_node("draft_post_content", generate_draft)
     graph.add_node("build_diagram_svg", render_diagram)
+    graph.add_node("publish_diagram_image", upload_diagram)
     graph.add_node("compose_preview_email", render_preview)
     graph.add_node("persist_outputs", save_outputs)
 
     graph.set_entry_point("load_style_preferences")
     graph.add_edge("load_style_preferences", "draft_post_content")
     graph.add_edge("draft_post_content", "build_diagram_svg")
-    graph.add_edge("build_diagram_svg", "compose_preview_email")
+    graph.add_edge("build_diagram_svg", "publish_diagram_image")
+    graph.add_edge("publish_diagram_image", "compose_preview_email")
     graph.add_edge("compose_preview_email", "persist_outputs")
     graph.add_edge("persist_outputs", END)
 
-    return graph.compile()    
+    return graph.compile()
