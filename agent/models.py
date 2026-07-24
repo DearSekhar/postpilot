@@ -2,10 +2,25 @@ from typing import List, Literal, Optional
 from pydantic import BaseModel, Field, field_validator
 
 
+def _truncate(text: str, max_len: int) -> str:
+    if len(text) <= max_len:
+        return text
+    return text[: max_len - 1].rstrip() + "…"
+
+
 class DiagramStep(BaseModel):
     title: str = Field(..., max_length=30)
     subtitle: Optional[str] = Field(default=None, max_length=40)
 
+    @field_validator("title", mode="before")
+    @classmethod
+    def truncate_title(cls, v: str) -> str:
+        return _truncate(v, 30) if isinstance(v, str) else v
+
+    @field_validator("subtitle", mode="before")
+    @classmethod
+    def truncate_subtitle(cls, v):
+        return _truncate(v, 40) if isinstance(v, str) else v
 
 class DiagramSpec(BaseModel):
     style: Literal["architecture", "concept"]
