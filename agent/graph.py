@@ -52,6 +52,7 @@ class AgentState(TypedDict, total=False):
     preferences: dict
     draft: Optional[PostDraft]
     diagram_svg: Optional[str]
+    diagram_image_urn: Optional[str]
     html_preview: Optional[str]
 
 
