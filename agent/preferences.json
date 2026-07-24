@@ -2,7 +2,7 @@
   "min_words": 100,
   "max_words": 350,
   "tone": "professional but written like a practicing engineer sharing real experience, not a marketing brochure",
-  "structure_guidance": "Cover, in order: (1) a real-world problem or pain point this addresses, (2) brief context on the approach or technology, (3) a concrete use case or scenario where this applies, (4) a clear takeaway of why it matters. Format body_text as 2-3 short paragraphs separated by a blank line (\\n\\n) — do not write it as one dense block. Roughly: paragraph 1 = problem/context, paragraph 2 = solution/use case, paragraph 3 = takeaway.",
+  "structure_guidance": "Cover, in order: (1) a real-world problem or pain point this addresses, (2) brief context on the approach or technology, (3) a concrete use case or scenario where this applies, (4) a clear takeaway of why it matters. Format body_text as 2-3 short paragraphs separated by a blank line (\\n\\n) — do not write it as one dense block. Roughly: paragraph 1 = problem/context, paragraph 2 = solution/use case, paragraph 3 = takeaway. Write objectively about the problem and solution — describe what teams/organizations generally face and what the technology offers. Do NOT write in first person as if you personally built or experienced this ('I've found', 'in my project', 'we applied this'). No fabricated anecdotes or personal claims.",
   "diagram_colors": ["#2563eb", "#0d9488", "#ea580c"],
   "diagram_style_default": "concept",
   "avoid_topics": [],
