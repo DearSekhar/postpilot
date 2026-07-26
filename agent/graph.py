@@ -6,7 +6,7 @@ from langgraph.graph import StateGraph, END
 from pydantic import ValidationError
 
 from agent.models import PostDraft
-from agent import config, diagram_gen, email_render, linkedin_image, llm_provider, token_utils
+from agent import config, diagram_gen, email_render, email_sender, linkedin_image, llm_provider, token_utils
 
 
 SYSTEM_PROMPT_TEMPLATE = """You are an assistant that writes short or Medium, sharp LinkedIn posts \
@@ -141,6 +141,23 @@ def save_outputs(state: AgentState) -> AgentState:
     return state
 
 
+def send_preview_email(state: AgentState) -> AgentState:
+    if not (config.GMAIL_ADDRESS and config.GMAIL_APP_PASSWORD and config.RECIPIENT_EMAIL):
+        print("Gmail not configured — skipping send, preview saved locally only.")
+        return state
+    try:
+        email_sender.send_email(
+            gmail_address=config.GMAIL_ADDRESS,
+            app_password=config.GMAIL_APP_PASSWORD,
+            to_address=config.RECIPIENT_EMAIL,
+            subject=f"Today's LinkedIn post: {state['draft'].topic}",
+            html_body=state["html_preview"],
+        )
+        print(f"Preview email sent to {config.RECIPIENT_EMAIL}")
+    except Exception as e:
+        print(f"Warning: failed to send email, preview still saved locally. {e}")
+    return state
+
 # def build_graph():
 #     graph = StateGraph(AgentState)
 #     graph.add_node("load_preferences", load_preferences)
@@ -183,6 +200,7 @@ def build_graph():
     graph.add_node("publish_diagram_image", upload_diagram)
     graph.add_node("compose_preview_email", render_preview)
     graph.add_node("persist_outputs", save_outputs)
+    graph.add_node("deliver_preview_email", send_preview_email)
 
     graph.set_entry_point("load_style_preferences")
     graph.add_edge("load_style_preferences", "draft_post_content")
@@ -190,6 +208,7 @@ def build_graph():
     graph.add_edge("build_diagram_svg", "publish_diagram_image")
     graph.add_edge("publish_diagram_image", "compose_preview_email")
     graph.add_edge("compose_preview_email", "persist_outputs")
-    graph.add_edge("persist_outputs", END)
+    graph.add_edge("persist_outputs", "deliver_preview_email")
+    graph.add_edge("deliver_preview_email", END)
 
     return graph.compile()

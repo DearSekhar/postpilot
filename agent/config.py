@@ -21,6 +21,10 @@ OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "output")
 LINKEDIN_ACCESS_TOKEN = os.getenv("LINKEDIN_ACCESS_TOKEN")
 LINKEDIN_API_VERSION = os.getenv("LINKEDIN_API_VERSION", "202601")
 
+GMAIL_ADDRESS = os.getenv("GMAIL_ADDRESS")
+GMAIL_APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD")
+RECIPIENT_EMAIL = os.getenv("RECIPIENT_EMAIL", GMAIL_ADDRESS)  # defaults to sending to yourself
+
 def validate() -> None:
     """Fail fast with a clear message instead of a confusing API error later."""
     if LLM_PROVIDER == "groq" and not GROQ_API_KEY:
