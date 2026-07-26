@@ -1,12 +1,14 @@
 """
-Builds the preview HTML, both for the locally-saved file and the real email.
-Diagram is embedded as a base64 PNG rather than raw SVG — Gmail (and most
-email clients) strip <svg> tags out of HTML email entirely.
+Builds the preview HTML. Takes a diagram image src string so the same
+function can produce two variants: a data-URI version for the locally
+saved preview.html (browsers render data URIs fine), and a "cid:..."
+version for the real email (Gmail strips data URIs but supports CID
+inline attachments).
 """
 from agent.models import PostDraft
 
 
-def build_html(draft: PostDraft, diagram_png_b64: str, approve_url: str) -> str:
+def build_html(draft: PostDraft, diagram_img_src: str, approve_url: str) -> str:
     hashtags_line = " ".join(f"#{h.lstrip('#')}" for h in draft.hashtags)
     button_note = "" if approve_url != "#" else " (link not active — TOKEN_SIGNING_SECRET not set)"
     return f"""<!DOCTYPE html>
@@ -19,7 +21,7 @@ def build_html(draft: PostDraft, diagram_png_b64: str, approve_url: str) -> str:
   <div style="white-space: pre-wrap; line-height: 1.5; margin: 20px 0;">{draft.body_text}</div>
   <p style="color: #2563eb;">{hashtags_line}</p>
 
-  <img src="data:image/png;base64,{diagram_png_b64}" alt="Post diagram"
+  <img src="{diagram_img_src}" alt="Post diagram"
        style="max-width:100%; margin: 24px 0; display:block;"/>
 
   <a href="{approve_url}" style="display:inline-block; background:#0d9488; color:white; padding:12px 24px;

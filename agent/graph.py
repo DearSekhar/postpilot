@@ -54,7 +54,9 @@ class AgentState(TypedDict, total=False):
     draft: Optional[PostDraft]
     diagram_svg: Optional[str]
     diagram_image_urn: Optional[str]
+    diagram_png_bytes: Optional[bytes]
     html_preview: Optional[str]
+    email_html: Optional[str]    
 
 
 def load_preferences(state: AgentState) -> AgentState:
@@ -108,19 +110,6 @@ def upload_diagram(state: AgentState) -> AgentState:
         print(f"Warning: diagram upload failed, continuing text-only. {e}")
         return {**state, "diagram_image_urn": None}
 
-# def render_preview(state: AgentState) -> AgentState:
-#     html = email_render.build_html(state["draft"], state["diagram_svg"])
-#     return {**state, "html_preview": html}
-
-# def render_preview(state: AgentState) -> AgentState:
-#     draft = state["draft"]
-#     approve_url = "#"
-#     if config.TOKEN_SIGNING_SECRET:
-#         approve_url = token_utils.build_approve_url(
-#             draft, config.APPROVE_BASE_URL, config.TOKEN_SIGNING_SECRET
-#         )
-#     html = email_render.build_html(draft, state["diagram_svg"], approve_url)
-#     return {**state, "html_preview": html}    
 
 def render_preview(state: AgentState) -> AgentState:
     draft = state["draft"]
@@ -130,11 +119,18 @@ def render_preview(state: AgentState) -> AgentState:
             draft, config.APPROVE_BASE_URL, config.TOKEN_SIGNING_SECRET,
             image_urn=state.get("diagram_image_urn"),
         )
-    # Gmail strips raw <svg> tags from HTML email, so use a base64 PNG everywhere instead —
-    # one consistent code path for both the saved preview.html and the actual email.
-    diagram_png_b64 = base64.b64encode(diagram_gen.svg_to_png(state["diagram_svg"])).decode()
-    html = email_render.build_html(draft, diagram_png_b64, approve_url)
-    return {**state, "html_preview": html}
+    diagram_png_bytes = diagram_gen.svg_to_png(state["diagram_svg"])
+    local_img_src = "data:image/png;base64," + base64.b64encode(diagram_png_bytes).decode()
+
+    html_local = email_render.build_html(draft, local_img_src, approve_url)
+    html_email = email_render.build_html(draft, "cid:diagram_image", approve_url)
+
+    return {
+        **state,
+        "html_preview": html_local,
+        "email_html": html_email,
+        "diagram_png_bytes": diagram_png_bytes,
+    }
 
 def save_outputs(state: AgentState) -> AgentState:
     os.makedirs(config.OUTPUT_DIR, exist_ok=True)
@@ -143,6 +139,7 @@ def save_outputs(state: AgentState) -> AgentState:
     with open(os.path.join(config.OUTPUT_DIR, "preview.html"), "w") as f:
         f.write(state["html_preview"])
     return state
+
 
 
 def send_preview_email(state: AgentState) -> AgentState:
@@ -155,13 +152,15 @@ def send_preview_email(state: AgentState) -> AgentState:
             app_password=config.GMAIL_APP_PASSWORD,
             to_address=config.RECIPIENT_EMAIL,
             subject=f"Today's LinkedIn post: {state['draft'].topic}",
-            html_body=state["html_preview"],
+            html_body=state["email_html"],
+            inline_image_bytes=state.get("diagram_png_bytes"),
+            image_cid="diagram_image",
         )
         print(f"Preview email sent to {config.RECIPIENT_EMAIL}")
     except Exception as e:
         print(f"Warning: failed to send email, preview still saved locally. {e}")
     return state
-
+    
 # def build_graph():
 #     graph = StateGraph(AgentState)
 #     graph.add_node("load_preferences", load_preferences)
