@@ -1,3 +1,4 @@
+import base64
 import json
 import os
 from typing import Optional, TypedDict
@@ -129,7 +130,10 @@ def render_preview(state: AgentState) -> AgentState:
             draft, config.APPROVE_BASE_URL, config.TOKEN_SIGNING_SECRET,
             image_urn=state.get("diagram_image_urn"),
         )
-    html = email_render.build_html(draft, state["diagram_svg"], approve_url)
+    # Gmail strips raw <svg> tags from HTML email, so use a base64 PNG everywhere instead —
+    # one consistent code path for both the saved preview.html and the actual email.
+    diagram_png_b64 = base64.b64encode(diagram_gen.svg_to_png(state["diagram_svg"])).decode()
+    html = email_render.build_html(draft, diagram_png_b64, approve_url)
     return {**state, "html_preview": html}
 
 def save_outputs(state: AgentState) -> AgentState:
