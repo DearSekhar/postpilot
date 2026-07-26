@@ -7,7 +7,7 @@ from langgraph.graph import StateGraph, END
 from pydantic import ValidationError
 
 from agent.models import PostDraft
-from agent import config, diagram_gen, email_render, email_sender, linkedin_image, llm_provider, token_utils
+from agent import config, diagram_gen, email_render, email_sender, linkedin_image, llm_provider, token_utils, topic_history
 
 
 SYSTEM_PROMPT_TEMPLATE = """You are an assistant that writes short or Medium, sharp LinkedIn posts \
@@ -19,6 +19,10 @@ Style preferences you must follow:
 - body_text must be between {min_words} and {max_words} words. Do not fall short of the minimum.
 - Structure: {structure_guidance}
 - Topics to avoid: {avoid_topics}
+
+Recently covered topics — pick something meaningfully different from all of these, \
+not a close variant:
+{recent_topics}
 
 Additional notes from past feedback (follow these closely, they reflect real corrections):
 {notes}
@@ -65,24 +69,48 @@ def load_preferences(state: AgentState) -> AgentState:
     return {**state, "preferences": prefs}
 
 
-def generate_draft(state: AgentState) -> AgentState:
-    prefs = state["preferences"]
-    system_prompt = SYSTEM_PROMPT_TEMPLATE.format(
-        tone=prefs["tone"],
-        min_words=prefs["min_words"],
-        max_words=prefs["max_words"],
-        structure_guidance=prefs["structure_guidance"],
-        avoid_topics=", ".join(prefs.get("avoid_topics", [])) or "none",
-        notes="\n".join(f"- {n}" for n in prefs.get("notes", [])) or "none yet",
-    )        
+# def generate_draft(state: AgentState) -> AgentState:
+#     prefs = state["preferences"]
+#     system_prompt = SYSTEM_PROMPT_TEMPLATE.format(
+#         tone=prefs["tone"],
+#         min_words=prefs["min_words"],
+#         max_words=prefs["max_words"],
+#         structure_guidance=prefs["structure_guidance"],
+#         avoid_topics=", ".join(prefs.get("avoid_topics", [])) or "none",
+#         notes="\n".join(f"- {n}" for n in prefs.get("notes", [])) or "none yet",
+#     )        
 
     
 
+#     last_error = None
+#     for attempt in range(2):  # one retry if the model returns malformed JSON/schema
+#         try:
+#             raw = llm_provider.generate_json(system_prompt, USER_PROMPT)
+#             draft = PostDraft.model_validate(raw)
+#             return {**state, "draft": draft}
+#         except (ValueError, ValidationError) as e:
+#             last_error = e
+#     raise RuntimeError(f"Failed to generate a valid draft after retries: {last_error}")
+
+def generate_draft(state: AgentState) -> AgentState:
+    prefs = state["preferences"]
+    recent_topics = topic_history.load_recent_topics()
+    system_prompt = SYSTEM_PROMPT_TEMPLATE.format(
+        tone=prefs.get("tone", "direct, practical"),
+        min_words=prefs.get("min_words", 80),
+        max_words=prefs.get("max_words", 120),
+        structure_guidance=prefs.get("structure_guidance", "no specific structure required"),
+        avoid_topics=", ".join(prefs.get("avoid_topics", [])) or "none",
+        notes="\n".join(f"- {n}" for n in prefs.get("notes", [])) or "none yet",
+        recent_topics="\n".join(f"- {t}" for t in recent_topics) or "none yet — this is the first post",
+    )
+
     last_error = None
-    for attempt in range(2):  # one retry if the model returns malformed JSON/schema
+    for attempt in range(2):
         try:
             raw = llm_provider.generate_json(system_prompt, USER_PROMPT)
             draft = PostDraft.model_validate(raw)
+            topic_history.record_topic(draft.topic)
             return {**state, "draft": draft}
         except (ValueError, ValidationError) as e:
             last_error = e
@@ -160,7 +188,7 @@ def send_preview_email(state: AgentState) -> AgentState:
     except Exception as e:
         print(f"Warning: failed to send email, preview still saved locally. {e}")
     return state
-    
+
 # def build_graph():
 #     graph = StateGraph(AgentState)
 #     graph.add_node("load_preferences", load_preferences)
