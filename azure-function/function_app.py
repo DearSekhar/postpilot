@@ -130,6 +130,9 @@ def approve(req: func.HttpRequest) -> func.HttpResponse:
     full_text = f"{payload['body_text']}\n\n{hashtags_line}".strip()
     image_urn = payload.get("image_urn")
 
+    print(f"POSTING — body_text length: {len(payload['body_text'])}, full_text length: {len(full_text)}")
+    print(f"POSTING — full_text content: {full_text!r}")
+
     resp = _publish_post(full_text, image_urn)    
 
     if resp.status_code == 201:
