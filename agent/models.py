@@ -36,6 +36,7 @@ class DiagramSpec(BaseModel):
 
 class PostDraft(BaseModel):
     topic: str
+    category: str
     body_text: str
     hashtags: List[str] = Field(default_factory=list, max_length=5)
     diagram: DiagramSpec

@@ -1,24 +1,27 @@
 """
-Tracks recently generated topics in a small JSON file so the LLM (which has
-no memory between runs) can be explicitly told what to avoid repeating.
+Tracks recently generated posts (topic, category, date) so the LLM, which
+has no memory between runs, can be told what to avoid repeating, and so
+content_mix balancing has real data to work from.
 """
 import json
 import os
+from datetime import date
 
 HISTORY_PATH = os.path.join(os.path.dirname(__file__), "topic_history.json")
-MAX_HISTORY = 15
+MAX_HISTORY = 20
 
 
-def load_recent_topics() -> list[str]:
+def load_recent_posts() -> list[dict]:
     if not os.path.exists(HISTORY_PATH):
         return []
     with open(HISTORY_PATH, "r") as f:
-        return json.load(f)
+        data = json.load(f)
+    return [d if isinstance(d, dict) else {"topic": d, "category": "unknown", "date": ""} for d in data]
 
 
-def record_topic(topic: str) -> None:
-    history = load_recent_topics()
-    history.append(topic)
+def record_post(topic: str, category: str) -> None:
+    history = load_recent_posts()
+    history.append({"topic": topic, "category": category, "date": date.today().isoformat()})
     history = history[-MAX_HISTORY:]
     with open(HISTORY_PATH, "w") as f:
         json.dump(history, f, indent=2)

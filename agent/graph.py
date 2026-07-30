@@ -7,22 +7,42 @@ from langgraph.graph import StateGraph, END
 from pydantic import ValidationError
 
 from agent.models import PostDraft
-from agent import config, diagram_gen, email_render, email_sender, linkedin_image, llm_provider, token_utils, topic_history
+from agent import config, content_mix, diagram_gen, email_render, email_sender, linkedin_image, llm_provider, token_utils, topic_history
 
+SYSTEM_PROMPT_TEMPLATE = """You are an assistant that writes short, sharp LinkedIn posts \
+for a working software/AI/cloud engineer. You are NOT a marketer — avoid buzzwords, hype, \
+and generic "excited to share" openers.
 
-SYSTEM_PROMPT_TEMPLATE = """You are an assistant that writes short or Medium, sharp LinkedIn posts \
-for a working software/AI engineer about AI and Azure topics. You are NOT a marketer — \
-avoid buzzwords, hype, and generic "excited to share" openers.
+Primary areas of expertise:
+{primary_domains}
 
-Style preferences you must follow:
-- Tone: {tone}
+Target audience:
+{target_audience}
+
+Prefer discussing these current AI topics when relevant:
+{preferred_ai_topics}
+
+Preferred post styles (pick whichever best fits the topic):
+{preferred_post_types}
+
+Tone: {tone}
+
+Hard rules:
 - body_text must be between {min_words} and {max_words} words. Do not fall short of the minimum.
-- Structure: {structure_guidance}
-- Topics to avoid: {avoid_topics}
+- Format body_text as 2-4 short paragraphs separated by a blank line (\\n\\n) — do not write it as one dense block.
+- Write objectively about the problem and solution — describe what teams/organizations generally \
+face and what the technology offers. Do NOT write in first person as if you personally built or \
+experienced this ('I've found', 'in my project', 'we applied this'). No fabricated anecdotes or personal claims.
+- Never use these phrases or close variants of them: {avoid_phrases}
+{discussion_question_rule}
 
-Recently covered topics — pick something meaningfully different from all of these, \
-not a close variant:
-{recent_topics}
+Category: choose exactly one of these labels, matching this post's primary theme:
+{category_options}
+{category_hint}
+
+Recently published posts — avoid repeating the same topic or category. If recent posts \
+are heavily weighted toward one category, prefer a different one this time:
+{recent_posts}
 
 Additional notes from past feedback (follow these closely, they reflect real corrections):
 {notes}
@@ -30,9 +50,10 @@ Additional notes from past feedback (follow these closely, they reflect real cor
 Respond with ONLY a JSON object, no markdown fences, no text before or after it. \
 The entire response must be valid, parseable JSON — this means any paragraph break \
 inside body_text must be written as the two characters backslash-n backslash-n (\\n\\n), \
-NOT an actual line break. Do not press enter inside string values. Matching exactly this shape:
+NOT an actual line break. Do not press enter inside string values. Match exactly this shape:
 {{
   "topic": "short topic name",
+  "category": "one of the category labels above, exact match",
   "body_text": "the LinkedIn post text",
   "hashtags": ["upto5", "shorttags"],
   "diagram": {{
@@ -44,13 +65,14 @@ NOT an actual line break. Do not press enter inside string values. Matching exac
 }}
 Use "architecture" style for topics about a specific Azure/AI service or pipeline \
 (2-4 steps, boxes flowing left to right). Use "concept" style for softer, mental-model \
-style topics (2-4 steps, simpler labels, no subtitles needed).
+style topics (2-4 steps, simpler labels, no subtitles needed). Default to \
+"{diagram_style_default}" if genuinely unsure.
 """
 
-
-
-
-USER_PROMPT = "Generate today's post. Pick a topic you have not covered before, related to AI or Azure."
+USER_PROMPT = (
+    "Generate today's post. Pick a topic and category that fits the content mix guidance "
+    "and hasn't been covered recently, following all the rules above."
+)
 
 
 class AgentState(TypedDict, total=False):
@@ -60,7 +82,7 @@ class AgentState(TypedDict, total=False):
     diagram_image_urn: Optional[str]
     diagram_png_bytes: Optional[bytes]
     html_preview: Optional[str]
-    email_html: Optional[str]    
+    email_html: Optional[str]
 
 
 def load_preferences(state: AgentState) -> AgentState:
@@ -69,40 +91,44 @@ def load_preferences(state: AgentState) -> AgentState:
     return {**state, "preferences": prefs}
 
 
-# def generate_draft(state: AgentState) -> AgentState:
-#     prefs = state["preferences"]
-#     system_prompt = SYSTEM_PROMPT_TEMPLATE.format(
-#         tone=prefs["tone"],
-#         min_words=prefs["min_words"],
-#         max_words=prefs["max_words"],
-#         structure_guidance=prefs["structure_guidance"],
-#         avoid_topics=", ".join(prefs.get("avoid_topics", [])) or "none",
-#         notes="\n".join(f"- {n}" for n in prefs.get("notes", [])) or "none yet",
-#     )        
-
-    
-
-#     last_error = None
-#     for attempt in range(2):  # one retry if the model returns malformed JSON/schema
-#         try:
-#             raw = llm_provider.generate_json(system_prompt, USER_PROMPT)
-#             draft = PostDraft.model_validate(raw)
-#             return {**state, "draft": draft}
-#         except (ValueError, ValidationError) as e:
-#             last_error = e
-#     raise RuntimeError(f"Failed to generate a valid draft after retries: {last_error}")
-
 def generate_draft(state: AgentState) -> AgentState:
     prefs = state["preferences"]
-    recent_topics = topic_history.load_recent_topics()
+    recent_posts = topic_history.load_recent_posts()
+    mix_targets = prefs.get("content_mix", {})
+
+    category_hint = ""
+    if mix_targets:
+        suggested = content_mix.suggest_category(mix_targets, recent_posts)
+        if suggested:
+            category_hint = (
+                f"(Suggested category to balance the content mix: {suggested} — "
+                f"use this unless the topic genuinely fits better elsewhere)"
+            )
+
+    discussion_question_rule = (
+        "- End the post with one short, genuine discussion-inviting question (not a generic \"thoughts?\")."
+        if prefs.get("discussion_question")
+        else "- Do not end with a discussion question."
+    )
+
     system_prompt = SYSTEM_PROMPT_TEMPLATE.format(
+        primary_domains=", ".join(prefs.get("primary_domains", [])) or "general software engineering",
+        target_audience=", ".join(prefs.get("target_audience", [])) or "general audience",
+        preferred_ai_topics=", ".join(prefs.get("preferred_ai_topics", [])) or "none specified",
+        preferred_post_types=", ".join(prefs.get("preferred_post_types", [])) or "none specified",
         tone=prefs.get("tone", "direct, practical"),
-        min_words=prefs.get("min_words", 80),
-        max_words=prefs.get("max_words", 120),
-        structure_guidance=prefs.get("structure_guidance", "no specific structure required"),
-        avoid_topics=", ".join(prefs.get("avoid_topics", [])) or "none",
+        min_words=prefs.get("min_words", 150),
+        max_words=prefs.get("max_words", 300),
+        avoid_phrases=", ".join(prefs.get("avoid_phrases", [])) or "none",
+        discussion_question_rule=discussion_question_rule,
+        category_options=", ".join(mix_targets.keys()) if mix_targets else "choose a sensible category",
+        category_hint=category_hint,
+        recent_posts="\n".join(
+            f"- {p['topic']} ({p.get('category', '?')}, {p.get('date', '?')})" for p in recent_posts[-5:]
+        )
+        or "none yet — this is the first post",
         notes="\n".join(f"- {n}" for n in prefs.get("notes", [])) or "none yet",
-        recent_topics="\n".join(f"- {t}" for t in recent_topics) or "none yet — this is the first post",
+        diagram_style_default=prefs.get("diagram_style_default", "concept"),
     )
 
     last_error = None
@@ -110,7 +136,7 @@ def generate_draft(state: AgentState) -> AgentState:
         try:
             raw = llm_provider.generate_json(system_prompt, USER_PROMPT)
             draft = PostDraft.model_validate(raw)
-            topic_history.record_topic(draft.topic)
+            topic_history.record_post(draft.topic, draft.category)
             return {**state, "draft": draft}
         except (ValueError, ValidationError) as e:
             last_error = e
