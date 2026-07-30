@@ -1,9 +1,42 @@
 [
-  "Explainable AI in Azure",
-  "AI-Powered Data Validation",
-  "Anomaly Detection in Azure",
-  "AI-Driven Knowledge Graphs",
-  "AI-Driven Content Generation",
-  "Continuous Learning in AI Models",
-  "AI Model Serving"
+  {
+    "topic": "Explainable AI in Azure",
+    "category": "unknown",
+    "date": ""
+  },
+  {
+    "topic": "AI-Powered Data Validation",
+    "category": "unknown",
+    "date": ""
+  },
+  {
+    "topic": "Anomaly Detection in Azure",
+    "category": "unknown",
+    "date": ""
+  },
+  {
+    "topic": "AI-Driven Knowledge Graphs",
+    "category": "unknown",
+    "date": ""
+  },
+  {
+    "topic": "AI-Driven Content Generation",
+    "category": "unknown",
+    "date": ""
+  },
+  {
+    "topic": "Continuous Learning in AI Models",
+    "category": "unknown",
+    "date": ""
+  },
+  {
+    "topic": "AI Model Serving",
+    "category": "unknown",
+    "date": ""
+  },
+  {
+    "topic": "Scalable Azure Integration",
+    "category": "Azure Integration",
+    "date": "2026-07-30"
+  }
 ]
