@@ -18,5 +18,8 @@
     "Performance & Observability": 10,
     "Career & Leadership": 5
   },
-  "notes": []
+  "notes": [
+    "Structure posts around a real business problem, ideally grounded in a concrete industry example or scenario (e.g. a retailer handling order spikes, a bank modernizing legacy integration), rather than a generic topic overview. Open with the problem and its business impact, then walk through how Azure/AI services solve it, referencing specific services and why they fit — not just what they do in the abstract.",
+    "The closing discussion question should be sharper and more specific to the scenario just discussed, not a generic prompt like 'What are some key considerations when designing X?'. It should invite a real opinion or experience, e.g. asking readers to weigh in on a tradeoff, share how they solved a similar problem, or challenge an assumption made in the post."
+  ]
 }
