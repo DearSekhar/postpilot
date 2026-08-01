@@ -35,13 +35,14 @@ face and what the technology offers. Do NOT write in first person as if you pers
 experienced this ('I've found', 'in my project', 'we applied this'). No fabricated anecdotes or personal claims.
 - Never use these phrases or close variants of them: {avoid_phrases}
 {discussion_question_rule}
+{business_problem_section}
 
 Category: choose exactly one of these labels, matching this post's primary theme:
 {category_options}
 {category_hint}
 
-Recently published posts — avoid repeating the same topic or category. If recent posts \
-are heavily weighted toward one category, prefer a different one this time:
+Recently published posts — avoid repeating the same topic, category, or industry. If recent \
+posts are heavily weighted toward one category or industry, prefer a different one this time:
 {recent_posts}
 
 Additional notes from past feedback (follow these closely, they reflect real corrections):
@@ -54,6 +55,13 @@ NOT an actual line break. Do not press enter inside string values. Match exactly
 {{
   "topic": "short topic name",
   "category": "one of the category labels above, exact match",
+  "industry": "{industry_field_hint}",
+  "business_problem": {{
+    "is_new": false,
+    "problem": "the business problem this post is built around, in your own words",
+    "why_hard": "what makes it genuinely hard for that industry",
+    "solution_pattern": "the Azure/AI services and pattern used to solve it"
+  }},
   "body_text": "the LinkedIn post text",
   "hashtags": ["upto5", "shorttags"],
   "diagram": {{
@@ -69,9 +77,36 @@ style topics (2-4 steps, simpler labels, no subtitles needed). Default to \
 "{diagram_style_default}" if genuinely unsure.
 """
 
+BUSINESS_PROBLEM_TEMPLATE = """
+Suggested business problem for this post (a strong starting point — use it unless you have \
+a genuinely better, equally specific and real business problem in the same industry in mind):
+- Industry: {industry}
+- Problem: {problem}
+- Why it's genuinely hard: {why_hard}
+- Suggested solution direction (Azure/AI services and pattern — you may extend or adjust this \
+if a better fit occurs to you): {solution_pattern}
+
+You may either:
+(a) Use the suggested problem above — write it in your own words, don't copy these lines \
+verbatim, and set "is_new": false in business_problem, echoing back a version of this problem \
+in the JSON fields.
+(b) Invent a different, comparably specific and realistic business problem in the SAME industry \
+({industry}) if you genuinely have a sharper or fresher one — set "is_new": true, and fill in \
+"problem" / "why_hard" / "solution_pattern" with your own specific, real-world business problem \
+(not a vague topic restatement — it must be as concrete as the example above). Only do this when \
+you have something genuinely good; don't invent for the sake of variety alone.
+
+Either way: open the post by grounding it in a real business problem (a concrete, illustrative \
+scenario in this industry is good — you don't need a named real company). Explain what makes it \
+hard for that industry specifically, not just in generic engineering terms. Then walk through the \
+solution with specific Azure/AI services and why they fit. The value of the post is the business \
+insight, not a feature announcement — do not frame this as "Microsoft just released X."
+"""
+
 USER_PROMPT = (
     "Generate today's post. Pick a topic and category that fits the content mix guidance "
-    "and hasn't been covered recently, following all the rules above."
+    "and hasn't been covered recently, and build it around the business problem provided "
+    "in the system prompt, following all the rules above."
 )
 
 
@@ -89,6 +124,50 @@ def load_preferences(state: AgentState) -> AgentState:
     with open(config.PREFERENCES_PATH, "r") as f:
         prefs = json.load(f)
     return {**state, "preferences": prefs}
+
+
+def _load_industry_problems() -> dict:
+    """Optional file — if it's not present yet, the pipeline just falls back
+    to the old generic-topic behavior instead of failing."""
+    if not os.path.exists(config.INDUSTRY_PROBLEMS_PATH):
+        return {}
+    with open(config.INDUSTRY_PROBLEMS_PATH, "r") as f:
+        return json.load(f)
+
+
+def _slugify(text: str, max_words: int = 5) -> str:
+    words = "".join(c.lower() if c.isalnum() or c.isspace() else " " for c in text).split()
+    return "_".join(words[:max_words]) or "problem"
+
+
+def _save_new_problem(industry: str, problem: dict) -> str:
+    """Appends a model-invented problem back into industry_problems.json so
+    the library grows over time and future runs can dedup against it too.
+    Best-effort — a failure here shouldn't break the run."""
+    try:
+        data = _load_industry_problems()
+        if not data:
+            return None
+        base_id = _slugify(problem["problem"])
+        existing_ids = {p["id"] for p in data.get("problems", {}).get(industry, [])}
+        new_id = base_id
+        n = 2
+        while new_id in existing_ids:
+            new_id = f"{base_id}_{n}"
+            n += 1
+        entry = {
+            "id": new_id,
+            "problem": problem["problem"],
+            "why_hard": problem["why_hard"],
+            "solution_pattern": problem["solution_pattern"],
+        }
+        data.setdefault("problems", {}).setdefault(industry, []).append(entry)
+        with open(config.INDUSTRY_PROBLEMS_PATH, "w") as f:
+            json.dump(data, f, indent=2)
+        return new_id
+    except Exception as e:
+        print(f"Warning: failed to save newly invented problem, continuing anyway. {e}")
+        return None
 
 
 def generate_draft(state: AgentState) -> AgentState:
@@ -111,6 +190,34 @@ def generate_draft(state: AgentState) -> AgentState:
         else "- Do not end with a discussion question."
     )
 
+    # Pick an industry + a concrete business problem to ground the post in.
+    industry_data = _load_industry_problems()
+    industry_mix = industry_data.get("industry_mix", {})
+    problems_by_industry = industry_data.get("problems", {})
+
+    chosen_industry = None
+    chosen_problem = None
+    business_problem_section = ""
+    industry_field_hint = "leave blank if not applicable"
+
+    if industry_mix and problems_by_industry:
+        chosen_industry = content_mix.suggest_industry(industry_mix, recent_posts)
+        chosen_problem = content_mix.pick_problem(chosen_industry, problems_by_industry, recent_posts)
+        if chosen_problem:
+            business_problem_section = BUSINESS_PROBLEM_TEMPLATE.format(
+                industry=chosen_industry,
+                problem=chosen_problem["problem"],
+                why_hard=chosen_problem["why_hard"],
+                solution_pattern=chosen_problem["solution_pattern"],
+            )
+            industry_field_hint = chosen_industry
+    else:
+        business_problem_section = (
+            "\nNo curated business problem is available this run — omit the industry and "
+            "business_problem fields (leave industry null, business_problem null) and write "
+            "a solid post on a topic that fits the category guidance.\n"
+        )
+
     system_prompt = SYSTEM_PROMPT_TEMPLATE.format(
         primary_domains=", ".join(prefs.get("primary_domains", [])) or "general software engineering",
         target_audience=", ".join(prefs.get("target_audience", [])) or "general audience",
@@ -121,14 +228,17 @@ def generate_draft(state: AgentState) -> AgentState:
         max_words=prefs.get("max_words", 300),
         avoid_phrases=", ".join(prefs.get("avoid_phrases", [])) or "none",
         discussion_question_rule=discussion_question_rule,
+        business_problem_section=business_problem_section,
         category_options=", ".join(mix_targets.keys()) if mix_targets else "choose a sensible category",
         category_hint=category_hint,
         recent_posts="\n".join(
-            f"- {p['topic']} ({p.get('category', '?')}, {p.get('date', '?')})" for p in recent_posts[-5:]
+            f"- {p['topic']} ({p.get('category', '?')}, industry: {p.get('industry', '?')}, {p.get('date', '?')})"
+            for p in recent_posts[-5:]
         )
         or "none yet — this is the first post",
         notes="\n".join(f"- {n}" for n in prefs.get("notes", [])) or "none yet",
         diagram_style_default=prefs.get("diagram_style_default", "concept"),
+        industry_field_hint=industry_field_hint,
     )
 
     last_error = None
@@ -136,7 +246,19 @@ def generate_draft(state: AgentState) -> AgentState:
         try:
             raw = llm_provider.generate_json(system_prompt, USER_PROMPT)
             draft = PostDraft.model_validate(raw)
-            topic_history.record_post(draft.topic, draft.category)
+
+            problem_id = chosen_problem["id"] if chosen_problem else None
+            if draft.business_problem and draft.business_problem.is_new and chosen_industry:
+                new_id = _save_new_problem(chosen_industry, draft.business_problem.model_dump())
+                if new_id:
+                    problem_id = new_id
+
+            topic_history.record_post(
+                draft.topic,
+                draft.category,
+                industry=chosen_industry,
+                problem_id=problem_id,
+            )
             return {**state, "draft": draft}
         except (ValueError, ValidationError) as e:
             last_error = e

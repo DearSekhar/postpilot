@@ -34,9 +34,18 @@ class DiagramSpec(BaseModel):
         return v
 
 
+class BusinessProblem(BaseModel):
+    is_new: bool = False
+    problem: str
+    why_hard: str
+    solution_pattern: str
+
+
 class PostDraft(BaseModel):
     topic: str
     category: str
+    industry: Optional[str] = None
+    business_problem: Optional[BusinessProblem] = None
     body_text: str
     hashtags: List[str] = Field(default_factory=list, max_length=5)
     diagram: DiagramSpec

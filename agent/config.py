@@ -16,6 +16,7 @@ TOKEN_SIGNING_SECRET = os.getenv("TOKEN_SIGNING_SECRET")
 APPROVE_BASE_URL = os.getenv("APPROVE_BASE_URL", "http://localhost:7071/api")
 
 PREFERENCES_PATH = os.path.join(os.path.dirname(__file__), "preferences.json")
+INDUSTRY_PROBLEMS_PATH = os.path.join(os.path.dirname(__file__), "industry_problems.json")
 OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "output")
 
 LINKEDIN_ACCESS_TOKEN = os.getenv("LINKEDIN_ACCESS_TOKEN")

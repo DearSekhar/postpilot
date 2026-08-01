@@ -19,9 +19,14 @@ def load_recent_posts() -> list[dict]:
     return [d if isinstance(d, dict) else {"topic": d, "category": "unknown", "date": ""} for d in data]
 
 
-def record_post(topic: str, category: str) -> None:
+def record_post(topic: str, category: str, industry: str | None = None, problem_id: str | None = None) -> None:
     history = load_recent_posts()
-    history.append({"topic": topic, "category": category, "date": date.today().isoformat()})
+    entry = {"topic": topic, "category": category, "date": date.today().isoformat()}
+    if industry:
+        entry["industry"] = industry
+    if problem_id:
+        entry["problem_id"] = problem_id
+    history.append(entry)
     history = history[-MAX_HISTORY:]
     with open(HISTORY_PATH, "w") as f:
         json.dump(history, f, indent=2)
