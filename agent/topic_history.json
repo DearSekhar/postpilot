@@ -43,5 +43,12 @@
     "topic": "Optimizing Retail Order Fulfillment with Azure Integration Services",
     "category": "Azure Integration",
     "date": "2026-07-31"
+  },
+  {
+    "topic": "Real-time Personalization",
+    "category": "Enterprise AI",
+    "date": "2026-08-01",
+    "industry": "Retail & E-commerce",
+    "problem_id": "retail_personalization_latency"
   }
 ]
