@@ -50,5 +50,12 @@
     "date": "2026-08-01",
     "industry": "Retail & E-commerce",
     "problem_id": "retail_personalization_latency"
+  },
+  {
+    "topic": "Real-time Fraud Detection in Financial Services",
+    "category": "Cloud Architecture",
+    "date": "2026-08-02",
+    "industry": "Financial Services",
+    "problem_id": "finance_fraud_latency"
   }
 ]
