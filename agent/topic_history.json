@@ -57,5 +57,12 @@
     "date": "2026-08-02",
     "industry": "Financial Services",
     "problem_id": "finance_fraud_latency"
+  },
+  {
+    "topic": "Standardizing Healthcare Data Exchange",
+    "category": "Enterprise AI",
+    "date": "2026-08-03",
+    "industry": "Healthcare",
+    "problem_id": "healthcare_interop"
   }
 ]
