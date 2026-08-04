@@ -18,7 +18,8 @@ import cairosvg
 from agent.icons import icon_group
 from agent.models import DiagramSpec
 
-BOX_W, BOX_H, GAP, MARGIN = 160, 56, 40, 40
+BOX_W, BOX_H, GAP, MARGIN = 160, 50, 40, 40
+HIERARCHY_BOX_W, HIERARCHY_GAP = 190, 28
 ICON_SIZE = 22
 TITLE_CHARS_PER_LINE = 16
 SUBTITLE_CHARS_PER_LINE = 22
@@ -29,7 +30,15 @@ MAX_SUBTITLE_LINES = 2
 def _wrap_subtitle(text: str) -> list[str]:
     if not text:
         return []
-    return textwrap.wrap(text, width=SUBTITLE_CHARS_PER_LINE)[:MAX_SUBTITLE_LINES]
+    lines = textwrap.wrap(text, width=SUBTITLE_CHARS_PER_LINE)
+    if len(lines) <= MAX_SUBTITLE_LINES:
+        return lines
+    shown = lines[:MAX_SUBTITLE_LINES]
+    last = shown[-1].rstrip()
+    if len(last) > SUBTITLE_CHARS_PER_LINE - 1:
+        last = last[: SUBTITLE_CHARS_PER_LINE - 1].rstrip()
+    shown[-1] = last + "…"
+    return shown
 
 
 def _box_height(step) -> int:
@@ -43,7 +52,7 @@ def _box_height(step) -> int:
 
 def _render_box(step, x: float, y: float, w: float, h: float, color: str) -> str:
     title = _escape(step.title)
-    content_top = y + 20
+    content_top = y + 16
 
     icon_svg = ""
     if step.icon:
@@ -51,11 +60,11 @@ def _render_box(step, x: float, y: float, w: float, h: float, color: str) -> str
         icon_svg = icon_group(step.icon, icon_x, content_top - 6, ICON_SIZE, color)
         content_top += ICON_SIZE + 4
 
-    title_y = content_top + 12
+    title_y = content_top + 10
     subtitle_lines = _wrap_subtitle(step.subtitle)
     subtitle_svg = ""
     for line_idx, line in enumerate(subtitle_lines):
-        line_y = title_y + 20 + line_idx * SUBTITLE_LINE_HEIGHT
+        line_y = title_y + 18 + line_idx * SUBTITLE_LINE_HEIGHT
         subtitle_svg += (
             f'<text x="{x + w/2}" y="{line_y}" text-anchor="middle" '
             f'font-size="11" fill="#475569">{_escape(line)}</text>'
@@ -105,7 +114,7 @@ def _render_horizontal(spec: DiagramSpec, colors: list[str]) -> tuple[str, float
 
 def _render_hierarchy(spec: DiagramSpec, colors: list[str]) -> tuple[str, float, float]:
     n = len(spec.steps)
-    box_w = 220
+    box_w = HIERARCHY_BOX_W
     box_heights = [_box_height(s) for s in spec.steps]
     total_w = box_w + 2 * MARGIN
     x = MARGIN
@@ -118,14 +127,14 @@ def _render_hierarchy(spec: DiagramSpec, colors: list[str]) -> tuple[str, float,
         boxes.append(_render_box(step, x, y, box_w, h, color))
         if i < n - 1:
             ax = x + box_w / 2
-            ay1, ay2 = y + h, y + h + GAP
+            ay1, ay2 = y + h, y + h + HIERARCHY_GAP
             arrows.append(
                 f'<line x1="{ax}" y1="{ay1}" x2="{ax}" y2="{ay2 - 6}" '
                 f'stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>'
             )
-        y += h + GAP
+        y += h + HIERARCHY_GAP
 
-    total_h = y - GAP + 30
+    total_h = y - HIERARCHY_GAP + 30
     body = "".join(arrows) + "".join(boxes)
     return body, total_w, total_h
 
@@ -149,9 +158,13 @@ def render_svg(spec: DiagramSpec, colors: list[str]) -> str:
 </svg>"""
 
 
-def svg_to_png(svg_string: str, width: int = 1200) -> bytes:
-    """Rasterizes the diagram for LinkedIn upload, which requires an actual image, not SVG."""
-    return cairosvg.svg2png(bytestring=svg_string.encode(), output_width=width)
+def svg_to_png(svg_string: str, scale: float = 2.0) -> bytes:
+    """Rasterizes the diagram for LinkedIn upload, which requires an actual
+    image, not SVG. Uses a fixed scale multiplier (not a fixed output width)
+    so narrow diagrams (e.g. hierarchy) and wide ones (e.g. architecture)
+    render at the same visual zoom level instead of narrow ones getting
+    blown up disproportionately to hit a fixed target width."""
+    return cairosvg.svg2png(bytestring=svg_string.encode(), scale=scale)
 
 
 def _escape(text: str) -> str:
