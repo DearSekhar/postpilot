@@ -8,9 +8,17 @@ def _truncate(text: str, max_len: int) -> str:
     return text[: max_len - 1].rstrip() + "…"
 
 
+KNOWN_ICONS = {
+    "user", "database", "cloud", "camera", "shield", "check", "alert",
+    "server", "mail", "chart", "factory", "hospital", "gear", "lock",
+    "search", "package",
+}
+
+
 class DiagramStep(BaseModel):
     title: str = Field(..., max_length=30)
     subtitle: Optional[str] = Field(default=None, max_length=40)
+    icon: Optional[str] = Field(default=None)
 
     @field_validator("title", mode="before")
     @classmethod
@@ -22,8 +30,18 @@ class DiagramStep(BaseModel):
     def truncate_subtitle(cls, v):
         return _truncate(v, 40) if isinstance(v, str) else v
 
+    @field_validator("icon", mode="before")
+    @classmethod
+    def validate_icon(cls, v):
+        # Unknown/hallucinated icon names degrade to "no icon" rather than
+        # failing the whole draft — icons are a visual nicety, not worth a retry.
+        if not isinstance(v, str):
+            return None
+        v = v.strip().lower()
+        return v if v in KNOWN_ICONS else None
+
 class DiagramSpec(BaseModel):
-    style: Literal["architecture", "concept"]
+    style: Literal["architecture", "concept", "hierarchy"]
     steps: List[DiagramStep]
 
     @field_validator("steps")

@@ -7,7 +7,7 @@ from langgraph.graph import StateGraph, END
 from pydantic import ValidationError
 
 from agent.models import PostDraft
-from agent import config, content_mix, diagram_gen, email_render, email_sender, linkedin_image, llm_provider, news_context, token_utils, topic_history
+from agent import config, content_mix, diagram_gen, email_render, email_sender, icons, linkedin_image, llm_provider, news_context, token_utils, topic_history
 
 SYSTEM_PROMPT_TEMPLATE = """You are an assistant that writes short, sharp LinkedIn posts \
 for a working software/AI/cloud engineer. You are NOT a marketer — avoid buzzwords, hype, \
@@ -66,16 +66,26 @@ NOT an actual line break. Do not press enter inside string values. Match exactly
   "body_text": "the LinkedIn post text",
   "hashtags": ["upto5", "shorttags"],
   "diagram": {{
-    "style": "architecture" or "concept",
+    "style": "architecture" or "concept" or "hierarchy",
     "steps": [
-      {{"title": "short label", "subtitle": "optional short line"}}
+      {{"title": "short label", "subtitle": "optional short line", "icon": "optional, see list below"}}
     ]
   }}
 }}
 Use "architecture" style for topics about a specific Azure/AI service or pipeline \
 (2-4 steps, boxes flowing left to right). Use "concept" style for softer, mental-model \
-style topics (2-4 steps, simpler labels, no subtitles needed). Default to \
+style topics (2-4 steps, simpler labels, no subtitles needed). Use "hierarchy" style \
+for topics that read better as a top-down pipeline or layered process (2-4 steps, \
+boxes stacked vertically top to bottom) — a good default choice for variety when either \
+architecture or hierarchy would fit equally well. Default to \
 "{diagram_style_default}" if genuinely unsure.
+
+For each step, optionally set "icon" to the single closest match from this exact list \
+(omit the field entirely if nothing fits well — don't force a mismatched icon): \
+{icon_names}. For example, a step about end users gets "user", a step about storing data \
+gets "database", a step about scanning/inspection gets "camera", a step about a safety or \
+compliance check gets "shield", a step about a completed/passed state gets "check", a step \
+about a flagged issue gets "alert".
 """
 
 BUSINESS_PROBLEM_TEMPLATE = """
@@ -261,6 +271,7 @@ def generate_draft(state: AgentState) -> AgentState:
         or "none yet — this is the first post",
         notes="\n".join(f"- {n}" for n in prefs.get("notes", [])) or "none yet",
         diagram_style_default=prefs.get("diagram_style_default", "concept"),
+        icon_names=", ".join(icons.ICON_NAMES),
         industry_field_hint=industry_field_hint,
     )
 

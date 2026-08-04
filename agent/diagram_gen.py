@@ -2,14 +2,25 @@
 Turns a DiagramSpec into a plain, self-contained SVG string.
 No external services or system dependencies (like Graphviz) required —
 keeps this free and portable to run inside GitHub Actions later.
+
+Supports three layouts:
+- "architecture" / "concept": horizontal left-to-right flow (original layout)
+- "hierarchy": vertical top-to-bottom flow, for topics that read better as
+  a hierarchy/pipeline stacked downward than sideways
+Each box can optionally show a small icon (see agent/icons.py) above its
+title, chosen by the model from a fixed vocabulary — falls back to no icon
+if the model picks something outside that vocabulary.
 """
 import textwrap
 
 import cairosvg
 
+from agent.icons import icon_group
 from agent.models import DiagramSpec
 
 BOX_W, BOX_H, GAP, MARGIN = 160, 56, 40, 40
+ICON_SIZE = 22
+TITLE_CHARS_PER_LINE = 16
 SUBTITLE_CHARS_PER_LINE = 22
 SUBTITLE_LINE_HEIGHT = 13
 MAX_SUBTITLE_LINES = 2
@@ -21,44 +32,59 @@ def _wrap_subtitle(text: str) -> list[str]:
     return textwrap.wrap(text, width=SUBTITLE_CHARS_PER_LINE)[:MAX_SUBTITLE_LINES]
 
 
-def render_svg(spec: DiagramSpec, colors: list[str]) -> str:
+def _box_height(step) -> int:
+    has_icon = bool(step.icon)
+    subtitle_lines = len(_wrap_subtitle(step.subtitle))
+    h = BOX_H + (ICON_SIZE + 6 if has_icon else 0)
+    if subtitle_lines > 1:
+        h += (subtitle_lines - 1) * SUBTITLE_LINE_HEIGHT
+    return h
+
+
+def _render_box(step, x: float, y: float, w: float, h: float, color: str) -> str:
+    title = _escape(step.title)
+    content_top = y + 20
+
+    icon_svg = ""
+    if step.icon:
+        icon_x = x + w / 2 - ICON_SIZE / 2
+        icon_svg = icon_group(step.icon, icon_x, content_top - 6, ICON_SIZE, color)
+        content_top += ICON_SIZE + 4
+
+    title_y = content_top + 12
+    subtitle_lines = _wrap_subtitle(step.subtitle)
+    subtitle_svg = ""
+    for line_idx, line in enumerate(subtitle_lines):
+        line_y = title_y + 20 + line_idx * SUBTITLE_LINE_HEIGHT
+        subtitle_svg += (
+            f'<text x="{x + w/2}" y="{line_y}" text-anchor="middle" '
+            f'font-size="11" fill="#475569">{_escape(line)}</text>'
+        )
+
+    return f"""
+    <rect x="{x}" y="{y}" width="{w}" height="{h}" rx="8"
+          fill="{color}" fill-opacity="0.12" stroke="{color}" stroke-width="1.5"/>
+    {icon_svg}
+    <text x="{x + w/2}" y="{title_y}" text-anchor="middle"
+          font-size="14" font-weight="600" fill="#1e293b">{title}</text>
+    {subtitle_svg}
+    """
+
+
+def _render_horizontal(spec: DiagramSpec, colors: list[str]) -> tuple[str, float, float]:
     n = len(spec.steps)
+    box_heights = [_box_height(s) for s in spec.steps]
+    box_h = max(box_heights)
     total_w = n * BOX_W + (n - 1) * GAP + 2 * MARGIN
-
-    wrapped_subtitles = [_wrap_subtitle(step.subtitle) for step in spec.steps]
-    max_lines = max((len(lines) for lines in wrapped_subtitles), default=0)
-    box_h = BOX_H if max_lines <= 1 else BOX_H + (max_lines - 1) * SUBTITLE_LINE_HEIGHT
-
     height = (140 if spec.style == "architecture" else 90) + box_h
 
-    boxes = []
-    arrows = []
-    x = MARGIN
-    y = 70
+    boxes, arrows = [], []
+    x, y = MARGIN, 70
     for i, step in enumerate(spec.steps):
         color = colors[i % len(colors)]
-        title = _escape(step.title)
-
-        subtitle_lines = wrapped_subtitles[i]
-        subtitle_svg = ""
-        for line_idx, line in enumerate(subtitle_lines):
-            line_y = y + 38 + line_idx * SUBTITLE_LINE_HEIGHT
-            subtitle_svg += (
-                f'<text x="{x + BOX_W/2}" y="{line_y}" text-anchor="middle" '
-                f'font-size="11" fill="#475569">{_escape(line)}</text>'
-            )
-
-        boxes.append(f"""
-        <rect x="{x}" y="{y}" width="{BOX_W}" height="{box_h}" rx="8"
-              fill="{color}" fill-opacity="0.12" stroke="{color}" stroke-width="1.5"/>
-        <text x="{x + BOX_W/2}" y="{y + 22}" text-anchor="middle"
-              font-size="14" font-weight="600" fill="#1e293b">{title}</text>
-        {subtitle_svg}
-        """)
+        boxes.append(_render_box(step, x, y, BOX_W, box_h, color))
         if i < n - 1:
-            ax1 = x + BOX_W
-            ax2 = x + BOX_W + GAP
-            ay = y + box_h / 2
+            ax1, ax2, ay = x + BOX_W, x + BOX_W + GAP, y + box_h / 2
             arrows.append(
                 f'<line x1="{ax1}" y1="{ay}" x2="{ax2 - 6}" y2="{ay}" '
                 f'stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>'
@@ -73,6 +99,43 @@ def render_svg(spec: DiagramSpec, colors: list[str]) -> str:
             f'font-size="12" fill="#64748b">&#8635; repeats each day</text>'
         )
 
+    body = "".join(arrows) + "".join(boxes) + loop_note
+    return body, total_w, height
+
+
+def _render_hierarchy(spec: DiagramSpec, colors: list[str]) -> tuple[str, float, float]:
+    n = len(spec.steps)
+    box_w = 220
+    box_heights = [_box_height(s) for s in spec.steps]
+    total_w = box_w + 2 * MARGIN
+    x = MARGIN
+
+    boxes, arrows = [], []
+    y = 30
+    for i, step in enumerate(spec.steps):
+        color = colors[i % len(colors)]
+        h = box_heights[i]
+        boxes.append(_render_box(step, x, y, box_w, h, color))
+        if i < n - 1:
+            ax = x + box_w / 2
+            ay1, ay2 = y + h, y + h + GAP
+            arrows.append(
+                f'<line x1="{ax}" y1="{ay1}" x2="{ax}" y2="{ay2 - 6}" '
+                f'stroke="#64748b" stroke-width="1.5" marker-end="url(#arrow)"/>'
+            )
+        y += h + GAP
+
+    total_h = y - GAP + 30
+    body = "".join(arrows) + "".join(boxes)
+    return body, total_w, total_h
+
+
+def render_svg(spec: DiagramSpec, colors: list[str]) -> str:
+    if spec.style == "hierarchy":
+        body, total_w, height = _render_hierarchy(spec, colors)
+    else:
+        body, total_w, height = _render_horizontal(spec, colors)
+
     return f"""<svg width="{total_w}" height="{height}" viewBox="0 0 {total_w} {height}"
      xmlns="http://www.w3.org/2000/svg" role="img">
   <defs>
@@ -82,9 +145,7 @@ def render_svg(spec: DiagramSpec, colors: list[str]) -> str:
             stroke-linecap="round" stroke-linejoin="round"/>
     </marker>
   </defs>
-  {''.join(arrows)}
-  {''.join(boxes)}
-  {loop_note}
+  {body}
 </svg>"""
 
 
