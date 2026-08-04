@@ -42,6 +42,17 @@ def suggest_industry(industry_mix: dict, recent_posts: list, window: int = 10) -
     return suggest_weighted(industry_mix, recent_posts, field="industry", window=window)
 
 
+# Default target mix for diagram layout variety. Deliberately not weighted
+# evenly — "architecture" was the model's default go-to before this existed,
+# so hierarchy/concept get a slightly larger target share to actively pull
+# variety in, not just prevent further drift.
+DEFAULT_DIAGRAM_STYLE_MIX = {"architecture": 30, "hierarchy": 40, "concept": 30}
+
+
+def suggest_diagram_style(recent_posts: list, style_mix: dict | None = None, window: int = 10) -> str | None:
+    return suggest_weighted(style_mix or DEFAULT_DIAGRAM_STYLE_MIX, recent_posts, field="diagram_style", window=window)
+
+
 def pick_problem(industry: str, category: str, problems_by_industry: dict, recent_posts: list, window: int = 10) -> dict | None:
     """Picks a business problem for the given industry that matches the
     suggested category where possible, preferring one not used in the

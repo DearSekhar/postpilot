@@ -72,13 +72,13 @@ NOT an actual line break. Do not press enter inside string values. Match exactly
     ]
   }}
 }}
-Use "architecture" style for topics about a specific Azure/AI service or pipeline \
-(2-4 steps, boxes flowing left to right). Use "concept" style for softer, mental-model \
-style topics (2-4 steps, simpler labels, no subtitles needed). Use "hierarchy" style \
-for topics that read better as a top-down pipeline or layered process (2-4 steps, \
-boxes stacked vertically top to bottom) — a good default choice for variety when either \
-architecture or hierarchy would fit equally well. Default to \
-"{diagram_style_default}" if genuinely unsure.
+{diagram_style_directive}
+Style definitions — "architecture": several distinct services/components shown side by side \
+(2-4 steps, boxes flowing left to right) — best when the point is how separate pieces connect. \
+"hierarchy": a sequential process or pipeline where each stage clearly follows from the one \
+before (2-4 steps, boxes stacked top to bottom) — best for step-by-step processes, most \
+data/workflow pipelines included. "concept": a soft, mental-model idea rather than a real \
+system (2-4 steps, simpler labels, no subtitles needed).
 
 For each step, optionally set "icon" to the single closest match from this exact list \
 (omit the field entirely if nothing fits well — don't force a mismatched icon): \
@@ -250,6 +250,10 @@ def generate_draft(state: AgentState) -> AgentState:
     except Exception as e:
         print(f"Warning: news_context lookup failed, continuing without it. {e}")
 
+    suggested_diagram_style = content_mix.suggest_diagram_style(
+        recent_posts, prefs.get("diagram_style_mix")
+    )
+
     system_prompt = SYSTEM_PROMPT_TEMPLATE.format(
         primary_domains=", ".join(prefs.get("primary_domains", [])) or "general software engineering",
         target_audience=", ".join(prefs.get("target_audience", [])) or "general audience",
@@ -270,7 +274,14 @@ def generate_draft(state: AgentState) -> AgentState:
         )
         or "none yet — this is the first post",
         notes="\n".join(f"- {n}" for n in prefs.get("notes", [])) or "none yet",
-        diagram_style_default=prefs.get("diagram_style_default", "concept"),
+        diagram_style_directive=(
+            f'Diagram style for this post: use "{suggested_diagram_style}" unless there is a '
+            f"genuinely strong content reason not to (this is about keeping visual variety across "
+            f"posts — most topics can fit more than one style, so don't default back to architecture "
+            f"out of habit)."
+            if suggested_diagram_style
+            else ""
+        ),
         icon_names=", ".join(icons.ICON_NAMES),
         industry_field_hint=industry_field_hint,
     )
@@ -292,6 +303,7 @@ def generate_draft(state: AgentState) -> AgentState:
                 draft.category,
                 industry=chosen_industry,
                 problem_id=problem_id,
+                diagram_style=draft.diagram.style,
             )
             return {**state, "draft": draft}
         except (ValueError, ValidationError) as e:
