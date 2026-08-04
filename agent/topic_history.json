@@ -64,5 +64,12 @@
     "date": "2026-08-03",
     "industry": "Healthcare",
     "problem_id": "healthcare_interop"
+  },
+  {
+    "topic": "Real-time Shipment Tracking",
+    "category": "Azure Integration",
+    "date": "2026-08-04",
+    "industry": "Supply Chain & Logistics",
+    "problem_id": "supplychain_visibility"
   }
 ]
