@@ -42,15 +42,30 @@ def suggest_industry(industry_mix: dict, recent_posts: list, window: int = 10) -
     return suggest_weighted(industry_mix, recent_posts, field="industry", window=window)
 
 
-def pick_problem(industry: str, problems_by_industry: dict, recent_posts: list, window: int = 10) -> dict | None:
-    """Picks a business problem for the given industry, preferring one not
-    used in the recent window (tracked via problem_id in topic_history).
-    Falls back to the full list if everything's been used recently."""
-    candidates = problems_by_industry.get(industry, [])
-    if not candidates:
+def pick_problem(industry: str, category: str, problems_by_industry: dict, recent_posts: list, window: int = 10) -> dict | None:
+    """Picks a business problem for the given industry that matches the
+    suggested category where possible, preferring one not used in the
+    recent window (tracked via problem_id in topic_history).
+
+    Fallback chain (each step only runs if the previous finds nothing):
+    1. same industry + matching category + not recently used
+    2. same industry + matching category (ignore recency)
+    3. same industry, any category + not recently used
+    4. same industry, any category (ignore recency)
+    """
+    all_candidates = problems_by_industry.get(industry, [])
+    if not all_candidates:
         return None
 
     recent_ids = {p.get("problem_id") for p in recent_posts[-window:] if p.get("problem_id")}
-    fresh = [p for p in candidates if p["id"] not in recent_ids]
 
-    return random.choice(fresh or candidates)
+    category_matches = [p for p in all_candidates if p.get("category") == category]
+
+    fresh_category_matches = [p for p in category_matches if p["id"] not in recent_ids]
+    if fresh_category_matches:
+        return random.choice(fresh_category_matches)
+    if category_matches:
+        return random.choice(category_matches)
+
+    fresh_any = [p for p in all_candidates if p["id"] not in recent_ids]
+    return random.choice(fresh_any or all_candidates)

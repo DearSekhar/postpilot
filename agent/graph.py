@@ -7,7 +7,7 @@ from langgraph.graph import StateGraph, END
 from pydantic import ValidationError
 
 from agent.models import PostDraft
-from agent import config, content_mix, diagram_gen, email_render, email_sender, linkedin_image, llm_provider, token_utils, topic_history
+from agent import config, content_mix, diagram_gen, email_render, email_sender, linkedin_image, llm_provider, news_context, token_utils, topic_history
 
 SYSTEM_PROMPT_TEMPLATE = """You are an assistant that writes short, sharp LinkedIn posts \
 for a working software/AI/cloud engineer. You are NOT a marketer — avoid buzzwords, hype, \
@@ -36,6 +36,7 @@ experienced this ('I've found', 'in my project', 'we applied this'). No fabricat
 - Never use these phrases or close variants of them: {avoid_phrases}
 {discussion_question_rule}
 {business_problem_section}
+{news_context_section}
 
 Category: choose exactly one of these labels, matching this post's primary theme:
 {category_options}
@@ -140,10 +141,10 @@ def _slugify(text: str, max_words: int = 5) -> str:
     return "_".join(words[:max_words]) or "problem"
 
 
-def _save_new_problem(industry: str, problem: dict) -> str:
+def _save_new_problem(industry: str, category: str, problem: dict) -> str:
     """Appends a model-invented problem back into industry_problems.json so
-    the library grows over time and future runs can dedup against it too.
-    Best-effort — a failure here shouldn't break the run."""
+    the library grows over time and future runs can dedup and category-match
+    against it too. Best-effort — a failure here shouldn't break the run."""
     try:
         data = _load_industry_problems()
         if not data:
@@ -157,6 +158,7 @@ def _save_new_problem(industry: str, problem: dict) -> str:
             n += 1
         entry = {
             "id": new_id,
+            "category": category,
             "problem": problem["problem"],
             "why_hard": problem["why_hard"],
             "solution_pattern": problem["solution_pattern"],
@@ -202,8 +204,17 @@ def generate_draft(state: AgentState) -> AgentState:
 
     if industry_mix and problems_by_industry:
         chosen_industry = content_mix.suggest_industry(industry_mix, recent_posts)
-        chosen_problem = content_mix.pick_problem(chosen_industry, problems_by_industry, recent_posts)
+        chosen_problem = content_mix.pick_problem(
+            chosen_industry, content_mix.suggest_category(mix_targets, recent_posts) if mix_targets else None,
+            problems_by_industry, recent_posts,
+        )
         if chosen_problem:
+            # The problem's own category tag is authoritative from here on —
+            # it reflects what the post will actually be about, so the model
+            # doesn't get to pick a different category than the content matches.
+            locked_category = chosen_problem.get("category")
+            if locked_category:
+                category_hint = f"(Category is fixed for this post: {locked_category} — use exactly this value)"
             business_problem_section = BUSINESS_PROBLEM_TEMPLATE.format(
                 industry=chosen_industry,
                 problem=chosen_problem["problem"],
@@ -218,6 +229,17 @@ def generate_draft(state: AgentState) -> AgentState:
             "a solid post on a topic that fits the category guidance.\n"
         )
 
+    # Optional real-world context (Azure updates, security news) — never a
+    # requirement, purely supporting flavor if genuinely relevant. Any
+    # failure here is silently ignored; it should never block a post.
+    news_context_section = ""
+    try:
+        effective_category = (chosen_problem.get("category") if chosen_problem else None) or content_mix.suggest_category(mix_targets, recent_posts)
+        relevant_news = news_context.get_relevant_context(chosen_industry, effective_category, prefs)
+        news_context_section = news_context.format_context_block(relevant_news)
+    except Exception as e:
+        print(f"Warning: news_context lookup failed, continuing without it. {e}")
+
     system_prompt = SYSTEM_PROMPT_TEMPLATE.format(
         primary_domains=", ".join(prefs.get("primary_domains", [])) or "general software engineering",
         target_audience=", ".join(prefs.get("target_audience", [])) or "general audience",
@@ -229,6 +251,7 @@ def generate_draft(state: AgentState) -> AgentState:
         avoid_phrases=", ".join(prefs.get("avoid_phrases", [])) or "none",
         discussion_question_rule=discussion_question_rule,
         business_problem_section=business_problem_section,
+        news_context_section=news_context_section,
         category_options=", ".join(mix_targets.keys()) if mix_targets else "choose a sensible category",
         category_hint=category_hint,
         recent_posts="\n".join(
@@ -249,7 +272,7 @@ def generate_draft(state: AgentState) -> AgentState:
 
             problem_id = chosen_problem["id"] if chosen_problem else None
             if draft.business_problem and draft.business_problem.is_new and chosen_industry:
-                new_id = _save_new_problem(chosen_industry, draft.business_problem.model_dump())
+                new_id = _save_new_problem(chosen_industry, draft.category, draft.business_problem.model_dump())
                 if new_id:
                     problem_id = new_id
 

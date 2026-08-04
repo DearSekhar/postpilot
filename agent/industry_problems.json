@@ -13,25 +13,29 @@
         "id": "retail_inventory_sync",
         "problem": "Inventory counts drift out of sync between the e-commerce storefront, warehouse management system, and in-store POS during high-traffic events (flash sales, Black Friday), leading to overselling and cancelled orders.",
         "why_hard": "High write concurrency, multiple systems of record, and the business cost of both overselling (refunds, trust) and underselling (lost revenue, stale 'out of stock' flags).",
-        "solution_pattern": "Event-driven inventory updates via Event Grid/Service Bus, CQRS-style read model for storefront queries, idempotent consumers, and eventual-consistency messaging to avoid a single bottleneck DB."
+        "solution_pattern": "Event-driven inventory updates via Event Grid/Service Bus, CQRS-style read model for storefront queries, idempotent consumers, and eventual-consistency messaging to avoid a single bottleneck DB.",
+        "category": "Azure Integration"
       },
       {
         "id": "retail_personalization_latency",
         "problem": "Personalized product recommendations are too slow to generate at checkout or on high-traffic landing pages, so retailers fall back to generic 'bestsellers' lists.",
         "why_hard": "Real-time inference at scale needs low latency without ballooning cost per request, and personalization models need frequent retraining as trends shift.",
-        "solution_pattern": "Azure AI Search with vector search for candidate retrieval, cached embeddings, and a lightweight ranking model served via Azure AI Foundry endpoints; async retraining pipeline."
+        "solution_pattern": "Azure AI Search with vector search for candidate retrieval, cached embeddings, and a lightweight ranking model served via Azure AI Foundry endpoints; async retraining pipeline.",
+        "category": "Enterprise AI"
       },
       {
         "id": "retail_returns_fraud",
         "problem": "Return fraud (wardrobing, receipt fraud, serial returners) erodes margins, but overly strict return policies hurt legitimate customer trust.",
         "why_hard": "Needs to balance false positives (angering good customers) against fraud losses, using signals scattered across order history, returns, and payment systems.",
-        "solution_pattern": "Event-driven fraud scoring pipeline combining rules engine + ML model, Azure Functions for real-time scoring, Azure AI for anomaly detection on returns patterns."
+        "solution_pattern": "Event-driven fraud scoring pipeline combining rules engine + ML model, Azure Functions for real-time scoring, Azure AI for anomaly detection on returns patterns.",
+        "category": "Enterprise AI"
       },
       {
         "id": "retail_omnichannel_data",
         "problem": "Customer data is fragmented across online, mobile app, and in-store systems, so support agents and marketing can't see a unified customer view.",
         "why_hard": "Legacy POS systems, differing data schemas, and privacy/compliance constraints on merging PII across channels.",
-        "solution_pattern": "Azure Integration Services (Logic Apps + API Management) to unify APIs, master data management pattern, and a customer 360 data layer via Azure Data services."
+        "solution_pattern": "Azure Integration Services (Logic Apps + API Management) to unify APIs, master data management pattern, and a customer 360 data layer via Azure Data services.",
+        "category": "Azure Integration"
       }
     ],
     "Financial Services": [
@@ -39,25 +43,29 @@
         "id": "finance_fraud_latency",
         "problem": "Fraud detection models flag suspicious transactions minutes after the transaction clears instead of before authorization, so fraudulent payments still go through.",
         "why_hard": "Sub-second latency requirements at high transaction volume, strict regulatory auditability of every decision, and the cost of false positives blocking legitimate customers.",
-        "solution_pattern": "Real-time scoring via Azure Functions/Event Hubs stream processing, model served at low latency through Azure AI Foundry, explainability logging for compliance/audit trail."
+        "solution_pattern": "Real-time scoring via Azure Functions/Event Hubs stream processing, model served at low latency through Azure AI Foundry, explainability logging for compliance/audit trail.",
+        "category": "Enterprise AI"
       },
       {
         "id": "finance_legacy_core_integration",
         "problem": "A bank's core banking system (often decades-old, batch-oriented) can't expose real-time balance/transaction data to modern mobile and partner apps.",
         "why_hard": "Core banking platforms are high-risk to modify directly; any integration must not compromise consistency or introduce downtime in a regulated system.",
-        "solution_pattern": "Strangler-fig pattern using API Management as an anti-corruption layer, Service Bus for async event propagation from batch core to modern services, without touching the core directly."
+        "solution_pattern": "Strangler-fig pattern using API Management as an anti-corruption layer, Service Bus for async event propagation from batch core to modern services, without touching the core directly.",
+        "category": "Azure Integration"
       },
       {
         "id": "finance_document_processing",
         "problem": "Loan and mortgage underwriting is delayed by manual review of unstructured documents (pay stubs, tax forms, bank statements) submitted in inconsistent formats.",
         "why_hard": "Documents vary wildly in format and quality (scans, photos, PDFs), and errors have real financial/compliance consequences.",
-        "solution_pattern": "Azure AI Document Intelligence for extraction, RAG-based validation against policy rules, human-in-the-loop review step for edge cases via Logic Apps workflow."
+        "solution_pattern": "Azure AI Document Intelligence for extraction, RAG-based validation against policy rules, human-in-the-loop review step for edge cases via Logic Apps workflow.",
+        "category": "Enterprise AI"
       },
       {
         "id": "finance_regulatory_reporting",
         "problem": "Compiling regulatory reports (e.g. risk exposure, AML summaries) requires manually pulling data from multiple siloed systems under tight deadlines.",
-        "why_hard": "Data lineage and auditability requirements mean you can't just 'move fast' — every number needs a traceable source, and formats change as regulations evolve.",
-        "solution_pattern": "Azure Data Factory/Synapse pipelines with full lineage tracking, Logic Apps orchestration for scheduled report assembly, versioned data contracts between source systems."
+        "why_hard": "Data lineage and auditability requirements mean you can't just 'move fast' \u2014 every number needs a traceable source, and formats change as regulations evolve.",
+        "solution_pattern": "Azure Data Factory/Synapse pipelines with full lineage tracking, Logic Apps orchestration for scheduled report assembly, versioned data contracts between source systems.",
+        "category": "Cloud Architecture"
       }
     ],
     "Healthcare": [
@@ -65,39 +73,45 @@
         "id": "healthcare_interop",
         "problem": "Patient records don't transfer cleanly between hospital systems and partner clinics due to inconsistent HL7/FHIR implementations, causing claim rejections and care delays.",
         "why_hard": "Every EHR vendor implements HL7/FHIR slightly differently, and mapping errors have direct patient-safety and compliance consequences (HIPAA).",
-        "solution_pattern": "Azure Health Data Services for FHIR normalization, schema validation at the integration boundary (API Management + Logic Apps), reconciliation queue for mismatches instead of silent drops."
+        "solution_pattern": "Azure Health Data Services for FHIR normalization, schema validation at the integration boundary (API Management + Logic Apps), reconciliation queue for mismatches instead of silent drops.",
+        "category": "Azure Integration"
       },
       {
         "id": "healthcare_claims_backlog",
         "problem": "Insurance claims processing backlogs grow because staff manually cross-check claims against policy rules and prior authorization records.",
         "why_hard": "Rules are complex, change frequently, and errors can mean incorrect denials (patient/provider harm) or overpayment (financial loss).",
-        "solution_pattern": "Rules-engine + RAG pipeline over policy documents using Azure AI Search, Azure Functions for orchestration, human review queue for low-confidence cases."
+        "solution_pattern": "Rules-engine + RAG pipeline over policy documents using Azure AI Search, Azure Functions for orchestration, human review queue for low-confidence cases.",
+        "category": "Enterprise AI"
       },
       {
         "id": "healthcare_appointment_noshow",
         "problem": "High no-show rates for appointments waste clinical capacity, but generic reminder systems don't reduce them meaningfully.",
         "why_hard": "No-show drivers vary by patient (transport, forgetfulness, cost anxiety) and a one-size reminder doesn't address the actual cause.",
-        "solution_pattern": "Event-driven reminder pipeline personalized via a lightweight prediction model (Azure AI Foundry), triggered through Event Grid based on risk score, with channel selection (SMS/call/app) per patient."
+        "solution_pattern": "Event-driven reminder pipeline personalized via a lightweight prediction model (Azure AI Foundry), triggered through Event Grid based on risk score, with channel selection (SMS/call/app) per patient.",
+        "category": "Enterprise AI"
       }
     ],
     "Supply Chain & Logistics": [
       {
         "id": "supplychain_visibility",
         "problem": "Companies can't see shipment status across multiple carriers and partners in real time, so delays are discovered only when a customer complains.",
-        "why_hard": "Data comes from dozens of external partner systems with different APIs, formats, and reliability — no single system of record exists.",
-        "solution_pattern": "Event Hubs/Service Bus ingestion layer normalizing partner feeds, Azure Digital Twins or a tracking data model for real-time shipment state, alerting via Logic Apps on SLA breach prediction."
+        "why_hard": "Data comes from dozens of external partner systems with different APIs, formats, and reliability \u2014 no single system of record exists.",
+        "solution_pattern": "Event Hubs/Service Bus ingestion layer normalizing partner feeds, Azure Digital Twins or a tracking data model for real-time shipment state, alerting via Logic Apps on SLA breach prediction.",
+        "category": "Distributed Systems"
       },
       {
         "id": "supplychain_demand_forecast",
         "problem": "Demand forecasts miss seasonal spikes and regional variation, causing either stockouts or excess inventory carrying cost.",
         "why_hard": "External factors (weather, local events, economic shifts) aren't captured in historical sales data alone, and forecast errors compound down the supply chain.",
-        "solution_pattern": "Azure AI Foundry model combining historical sales + external signal enrichment, retrained on a schedule via pipelines, exposed through an API consumed by planning systems."
+        "solution_pattern": "Azure AI Foundry model combining historical sales + external signal enrichment, retrained on a schedule via pipelines, exposed through an API consumed by planning systems.",
+        "category": "Enterprise AI"
       },
       {
         "id": "supplychain_supplier_risk",
         "problem": "Disruption at a single-source supplier (natural disaster, geopolitical event) isn't detected until it's already impacting production.",
         "why_hard": "Requires correlating external news/events with internal supplier dependency data that's often scattered across procurement spreadsheets.",
-        "solution_pattern": "Agentic pipeline that monitors external signals, cross-references supplier dependency graph (Azure AI Search over structured supplier data), and raises early-warning alerts via Logic Apps."
+        "solution_pattern": "Agentic pipeline that monitors external signals, cross-references supplier dependency graph (Azure AI Search over structured supplier data), and raises early-warning alerts via Logic Apps.",
+        "category": "Enterprise AI"
       }
     ],
     "Manufacturing": [
@@ -105,13 +119,15 @@
         "id": "manufacturing_predictive_maintenance",
         "problem": "Unplanned equipment downtime on the factory floor causes costly production stoppages that reactive maintenance schedules don't prevent.",
         "why_hard": "Sensor data volume is huge, failure patterns are equipment-specific, and false alarms erode trust in the system quickly.",
-        "solution_pattern": "IoT Hub ingestion + Azure AI Foundry anomaly detection model, Event Grid-triggered maintenance workflows, feedback loop from technician outcomes to improve the model."
+        "solution_pattern": "IoT Hub ingestion + Azure AI Foundry anomaly detection model, Event Grid-triggered maintenance workflows, feedback loop from technician outcomes to improve the model.",
+        "category": "Enterprise AI"
       },
       {
         "id": "manufacturing_quality_inspection",
         "problem": "Manual visual quality inspection on production lines is slow and inconsistent between shifts/inspectors, letting defects through intermittently.",
         "why_hard": "Defect types vary by product line, lighting/camera conditions differ, and false rejects have real cost (scrapped good units).",
-        "solution_pattern": "Computer vision model (Azure AI Vision / custom model) at the edge for real-time inspection, with human review queue for borderline cases and continuous retraining from labeled corrections."
+        "solution_pattern": "Computer vision model (Azure AI Vision / custom model) at the edge for real-time inspection, with human review queue for borderline cases and continuous retraining from labeled corrections.",
+        "category": "Enterprise AI"
       }
     ],
     "Public Sector & Utilities": [
@@ -119,13 +135,15 @@
         "id": "utilities_grid_demand",
         "problem": "Utility providers struggle to predict localized demand spikes (heatwaves, EV charging clusters), leading to either overprovisioning or localized outages.",
         "why_hard": "Demand is hyper-local and time-sensitive, and infrastructure changes (new EV chargers, solar adoption) shift patterns faster than annual planning cycles.",
-        "solution_pattern": "Event Hubs ingestion of smart meter data, Azure AI Foundry short-horizon forecasting model per grid segment, automated alerts via Logic Apps for proactive load balancing."
+        "solution_pattern": "Event Hubs ingestion of smart meter data, Azure AI Foundry short-horizon forecasting model per grid segment, automated alerts via Logic Apps for proactive load balancing.",
+        "category": "Enterprise AI"
       },
       {
         "id": "publicsector_citizen_services",
         "problem": "Citizens face long wait times and repeated document submission across different government service portals for related applications (permits, benefits, licenses).",
         "why_hard": "Systems are siloed across departments with different legacy tech stacks, strict data-sharing/privacy rules, and low tolerance for downtime or errors.",
-        "solution_pattern": "API Management as a unified citizen-facing gateway, Logic Apps orchestrating cross-department workflows, secure data-sharing agreements enforced at the integration layer."
+        "solution_pattern": "API Management as a unified citizen-facing gateway, Logic Apps orchestrating cross-department workflows, secure data-sharing agreements enforced at the integration layer.",
+        "category": "Azure Integration"
       }
     ]
   }
