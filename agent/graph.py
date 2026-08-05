@@ -80,6 +80,11 @@ before (2-4 steps, boxes stacked top to bottom) — best for step-by-step proces
 data/workflow pipelines included. "concept": a soft, mental-model idea rather than a real \
 system (2-4 steps, simpler labels, no subtitles needed).
 
+Keep each step's "subtitle" genuinely short — a 2-4 word phrase, under 40 characters, \
+not a sentence (it has to fit on two short lines inside a small box; longer text gets \
+cut off with an ellipsis, which looks broken). For example "Real-time defect scan", not \
+"Scans products in real-time to detect potential defects".
+
 For each step, optionally set "icon" to the single closest match from this exact list \
 (omit the field entirely if nothing fits well — don't force a mismatched icon): \
 {icon_names}. For example, a step about end users gets "user", a step about storing data \

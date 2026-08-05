@@ -17,7 +17,7 @@ KNOWN_ICONS = {
 
 class DiagramStep(BaseModel):
     title: str = Field(..., max_length=30)
-    subtitle: Optional[str] = Field(default=None, max_length=60)
+    subtitle: Optional[str] = Field(default=None, max_length=44)
     icon: Optional[str] = Field(default=None)
 
     @field_validator("title", mode="before")
@@ -28,7 +28,7 @@ class DiagramStep(BaseModel):
     @field_validator("subtitle", mode="before")
     @classmethod
     def truncate_subtitle(cls, v):
-        return _truncate(v, 60) if isinstance(v, str) else v
+        return _truncate(v, 44) if isinstance(v, str) else v
 
     @field_validator("icon", mode="before")
     @classmethod

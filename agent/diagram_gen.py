@@ -18,13 +18,18 @@ import cairosvg
 from agent.icons import icon_group
 from agent.models import DiagramSpec
 
-BOX_W, BOX_H, GAP, MARGIN = 160, 50, 40, 40
-HIERARCHY_BOX_W, HIERARCHY_GAP = 190, 28
-ICON_SIZE = 22
+BOX_W, BOX_H, GAP, MARGIN = 150, 34, 36, 36
+HIERARCHY_BOX_W, HIERARCHY_GAP = 165, 20
+ICON_SIZE = 18
 TITLE_CHARS_PER_LINE = 16
-SUBTITLE_CHARS_PER_LINE = 22
-SUBTITLE_LINE_HEIGHT = 13
+TITLE_LINE_HEIGHT = 15
+SUBTITLE_CHARS_PER_LINE = 24
+SUBTITLE_LINE_HEIGHT = 12
 MAX_SUBTITLE_LINES = 2
+
+
+def _wrap_title(text: str) -> list[str]:
+    return textwrap.wrap(text, width=TITLE_CHARS_PER_LINE)[:2] or [text]
 
 
 def _wrap_subtitle(text: str) -> list[str]:
@@ -42,40 +47,53 @@ def _wrap_subtitle(text: str) -> list[str]:
 
 
 def _box_height(step) -> int:
-    has_icon = bool(step.icon)
+    h = BOX_H
+    if step.icon:
+        h += ICON_SIZE + 2
+    title_lines = len(_wrap_title(step.title))
+    if title_lines > 1:
+        h += (title_lines - 1) * TITLE_LINE_HEIGHT
     subtitle_lines = len(_wrap_subtitle(step.subtitle))
-    h = BOX_H + (ICON_SIZE + 6 if has_icon else 0)
-    if subtitle_lines > 1:
-        h += (subtitle_lines - 1) * SUBTITLE_LINE_HEIGHT
+    if subtitle_lines >= 1:
+        h += 17
+        if subtitle_lines > 1:
+            h += (subtitle_lines - 1) * SUBTITLE_LINE_HEIGHT
     return h
 
 
 def _render_box(step, x: float, y: float, w: float, h: float, color: str) -> str:
-    title = _escape(step.title)
-    content_top = y + 16
+    content_top = y + 12
 
     icon_svg = ""
     if step.icon:
         icon_x = x + w / 2 - ICON_SIZE / 2
-        icon_svg = icon_group(step.icon, icon_x, content_top - 6, ICON_SIZE, color)
-        content_top += ICON_SIZE + 4
+        icon_svg = icon_group(step.icon, icon_x, content_top - 4, ICON_SIZE, color)
+        content_top += ICON_SIZE + 2
 
-    title_y = content_top + 10
+    title_lines = _wrap_title(step.title)
+    title_svg = ""
+    for i, line in enumerate(title_lines):
+        line_y = content_top + 8 + i * TITLE_LINE_HEIGHT
+        title_svg += (
+            f'<text x="{x + w/2}" y="{line_y}" text-anchor="middle" '
+            f'font-size="13" font-weight="600" fill="#1e293b">{_escape(line)}</text>'
+        )
+    last_title_y = content_top + 8 + (len(title_lines) - 1) * TITLE_LINE_HEIGHT
+
     subtitle_lines = _wrap_subtitle(step.subtitle)
     subtitle_svg = ""
     for line_idx, line in enumerate(subtitle_lines):
-        line_y = title_y + 18 + line_idx * SUBTITLE_LINE_HEIGHT
+        line_y = last_title_y + 15 + line_idx * SUBTITLE_LINE_HEIGHT
         subtitle_svg += (
             f'<text x="{x + w/2}" y="{line_y}" text-anchor="middle" '
-            f'font-size="11" fill="#475569">{_escape(line)}</text>'
+            f'font-size="10" fill="#475569">{_escape(line)}</text>'
         )
 
     return f"""
-    <rect x="{x}" y="{y}" width="{w}" height="{h}" rx="8"
+    <rect x="{x}" y="{y}" width="{w}" height="{h}" rx="6"
           fill="{color}" fill-opacity="0.12" stroke="{color}" stroke-width="1.5"/>
     {icon_svg}
-    <text x="{x + w/2}" y="{title_y}" text-anchor="middle"
-          font-size="14" font-weight="600" fill="#1e293b">{title}</text>
+    {title_svg}
     {subtitle_svg}
     """
 
