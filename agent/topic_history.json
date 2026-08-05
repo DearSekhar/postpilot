@@ -71,5 +71,13 @@
     "date": "2026-08-04",
     "industry": "Supply Chain & Logistics",
     "problem_id": "supplychain_visibility"
+  },
+  {
+    "topic": "Automating Quality Inspection in Manufacturing",
+    "category": "Enterprise AI",
+    "date": "2026-08-05",
+    "industry": "Manufacturing",
+    "problem_id": "manufacturing_quality_inspection",
+    "diagram_style": "hierarchy"
   }
 ]
