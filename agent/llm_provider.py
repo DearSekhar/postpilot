@@ -26,7 +26,7 @@ def _call_groq(system_prompt: str, user_prompt: str) -> str:
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
-            "temperature": 0.8,
+            "temperature": config.LLM_TEMPERATURE,
         },
         timeout=60,
     )
@@ -44,7 +44,7 @@ def _call_gemini(system_prompt: str, user_prompt: str) -> str:
         json={
             "system_instruction": {"parts": [{"text": system_prompt}]},
             "contents": [{"role": "user", "parts": [{"text": user_prompt}]}],
-            "generationConfig": {"temperature": 0.8},
+            "generationConfig": {"temperature": config.LLM_TEMPERATURE},
         },
         timeout=60,
     )

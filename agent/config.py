@@ -12,6 +12,8 @@ GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
+LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "1.0"))
+
 TOKEN_SIGNING_SECRET = os.getenv("TOKEN_SIGNING_SECRET")
 APPROVE_BASE_URL = os.getenv("APPROVE_BASE_URL", "http://localhost:7071/api")
 
@@ -34,3 +36,5 @@ def validate() -> None:
         raise RuntimeError("LLM_PROVIDER=gemini but GEMINI_API_KEY is not set in .env")
     if LLM_PROVIDER not in ("groq", "gemini"):
         raise RuntimeError(f"Unknown LLM_PROVIDER '{LLM_PROVIDER}' — use 'groq' or 'gemini'")
+    if not (0.0 <= LLM_TEMPERATURE <= 2.0):
+        raise RuntimeError(f"LLM_TEMPERATURE={LLM_TEMPERATURE} is out of range — use a value between 0.0 and 2.0")
