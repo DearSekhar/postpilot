@@ -11,12 +11,12 @@
   "diagram_style_default": "concept",
   "diagram_colors": ["#2563eb", "#0d9488", "#ea580c"],
   "content_mix": {
-    "Azure Integration": 30,
-    "Enterprise AI": 25,
-    "Cloud Architecture": 20,
-    "Distributed Systems": 10,
-    "Performance & Observability": 10,
-    "Career & Leadership": 5
+      "Enterprise AI": 35,
+      "Azure Integration": 15,
+      "Cloud Architecture": 20,
+      "Distributed Systems": 15,
+      "Performance & Observability": 10,
+      "Career & Leadership": 5
   },
   "notes": [
     "Structure posts around a real business problem, ideally grounded in a concrete industry example or scenario (e.g. a retailer handling order spikes, a bank modernizing legacy integration), rather than a generic topic overview. Open with the problem and its business impact, then walk through how Azure/AI services solve it, referencing specific services and why they fit — not just what they do in the abstract.",
