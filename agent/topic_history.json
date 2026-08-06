@@ -79,5 +79,13 @@
     "industry": "Manufacturing",
     "problem_id": "manufacturing_quality_inspection",
     "diagram_style": "hierarchy"
+  },
+  {
+    "topic": "Unified Government Services",
+    "category": "Azure Integration",
+    "date": "2026-08-06",
+    "industry": "Public Sector & Utilities",
+    "problem_id": "publicsector_citizen_services",
+    "diagram_style": "architecture"
   }
 ]
