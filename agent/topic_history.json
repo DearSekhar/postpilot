@@ -87,5 +87,13 @@
     "industry": "Public Sector & Utilities",
     "problem_id": "publicsector_citizen_services",
     "diagram_style": "architecture"
+  },
+  {
+    "topic": "Real-time Inventory Sync",
+    "category": "Azure Integration",
+    "date": "2026-08-07",
+    "industry": "Retail & E-commerce",
+    "problem_id": "retail_inventory_sync",
+    "diagram_style": "hierarchy"
   }
 ]
