@@ -95,5 +95,13 @@
     "industry": "Retail & E-commerce",
     "problem_id": "retail_inventory_sync",
     "diagram_style": "hierarchy"
+  },
+  {
+    "topic": "Streamlining Loan Underwriting",
+    "category": "Enterprise AI",
+    "date": "2026-08-08",
+    "industry": "Financial Services",
+    "problem_id": "finance_document_processing",
+    "diagram_style": "concept"
   }
 ]
