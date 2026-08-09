@@ -103,5 +103,13 @@
     "industry": "Financial Services",
     "problem_id": "finance_document_processing",
     "diagram_style": "concept"
+  },
+  {
+    "topic": "Streamlining Insurance Claims",
+    "category": "Enterprise AI",
+    "date": "2026-08-09",
+    "industry": "Healthcare",
+    "problem_id": "healthcare_claims_backlog",
+    "diagram_style": "architecture"
   }
 ]
