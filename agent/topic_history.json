@@ -111,5 +111,13 @@
     "industry": "Healthcare",
     "problem_id": "healthcare_claims_backlog",
     "diagram_style": "architecture"
+  },
+  {
+    "topic": "Real-time Shipment Tracking",
+    "category": "Distributed Systems",
+    "date": "2026-08-10",
+    "industry": "Supply Chain & Logistics",
+    "problem_id": "supplychain_visibility",
+    "diagram_style": "hierarchy"
   }
 ]
