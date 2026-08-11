@@ -119,5 +119,13 @@
     "industry": "Supply Chain & Logistics",
     "problem_id": "supplychain_visibility",
     "diagram_style": "hierarchy"
+  },
+  {
+    "topic": "Predictive Maintenance in Manufacturing",
+    "category": "Enterprise AI",
+    "date": "2026-08-11",
+    "industry": "Manufacturing",
+    "problem_id": "manufacturing_predictive_maintenance",
+    "diagram_style": "concept"
   }
 ]
