@@ -1,10 +1,5 @@
 [
   {
-    "topic": "Explainable AI in Azure",
-    "category": "unknown",
-    "date": ""
-  },
-  {
     "topic": "AI-Powered Data Validation",
     "category": "unknown",
     "date": ""
@@ -127,5 +122,13 @@
     "industry": "Manufacturing",
     "problem_id": "manufacturing_predictive_maintenance",
     "diagram_style": "concept"
+  },
+  {
+    "topic": "Real-time Personalization",
+    "category": "Enterprise AI",
+    "date": "2026-08-12",
+    "industry": "Retail & E-commerce",
+    "problem_id": "retail_personalization_latency",
+    "diagram_style": "architecture"
   }
 ]
