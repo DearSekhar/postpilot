@@ -1,10 +1,5 @@
 [
   {
-    "topic": "Anomaly Detection in Azure",
-    "category": "unknown",
-    "date": ""
-  },
-  {
     "topic": "AI-Driven Knowledge Graphs",
     "category": "unknown",
     "date": ""
@@ -133,5 +128,13 @@
     "industry": "Financial Services",
     "problem_id": "finance_regulatory_reporting",
     "diagram_style": "hierarchy"
+  },
+  {
+    "topic": "Streamlining Patient Record Exchange",
+    "category": "Azure Integration",
+    "date": "2026-08-14",
+    "industry": "Healthcare",
+    "problem_id": "healthcare_interop",
+    "diagram_style": "concept"
   }
 ]
