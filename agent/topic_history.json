@@ -1,10 +1,5 @@
 [
   {
-    "topic": "AI-Driven Knowledge Graphs",
-    "category": "unknown",
-    "date": ""
-  },
-  {
     "topic": "AI-Driven Content Generation",
     "category": "unknown",
     "date": ""
@@ -136,5 +131,13 @@
     "industry": "Healthcare",
     "problem_id": "healthcare_interop",
     "diagram_style": "concept"
+  },
+  {
+    "topic": "Early Supplier Disruption Detection",
+    "category": "Enterprise AI",
+    "date": "2026-08-15",
+    "industry": "Supply Chain & Logistics",
+    "problem_id": "supplychain_supplier_risk",
+    "diagram_style": "architecture"
   }
 ]
