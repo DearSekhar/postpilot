@@ -1,10 +1,5 @@
 [
   {
-    "topic": "AI-Driven Content Generation",
-    "category": "unknown",
-    "date": ""
-  },
-  {
     "topic": "Continuous Learning in AI Models",
     "category": "unknown",
     "date": ""
@@ -139,5 +134,13 @@
     "industry": "Supply Chain & Logistics",
     "problem_id": "supplychain_supplier_risk",
     "diagram_style": "architecture"
+  },
+  {
+    "topic": "Edge AI for Visual Inspection",
+    "category": "Enterprise AI",
+    "date": "2026-08-16",
+    "industry": "Manufacturing",
+    "problem_id": "manufacturing_quality_inspection",
+    "diagram_style": "hierarchy"
   }
 ]
