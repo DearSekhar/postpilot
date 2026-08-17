@@ -1,10 +1,5 @@
 [
   {
-    "topic": "Continuous Learning in AI Models",
-    "category": "unknown",
-    "date": ""
-  },
-  {
     "topic": "AI Model Serving",
     "category": "unknown",
     "date": ""
@@ -142,5 +137,13 @@
     "industry": "Manufacturing",
     "problem_id": "manufacturing_quality_inspection",
     "diagram_style": "hierarchy"
+  },
+  {
+    "topic": "Unified API gateway for citizen services",
+    "category": "Azure Integration",
+    "date": "2026-08-17",
+    "industry": "Public Sector & Utilities",
+    "problem_id": "publicsector_citizen_services",
+    "diagram_style": "architecture"
   }
 ]
