@@ -1,10 +1,5 @@
 [
   {
-    "topic": "Scalable Azure Integration",
-    "category": "Azure Integration",
-    "date": "2026-07-30"
-  },
-  {
     "topic": "Optimizing Retail Order Fulfillment with Azure Integration Services",
     "category": "Azure Integration",
     "date": "2026-07-31"
@@ -148,5 +143,13 @@
     "industry": "Retail & E-commerce",
     "problem_id": "retail_omnichannel_data",
     "diagram_style": "hierarchy"
+  },
+  {
+    "topic": "Regulatory reporting pipeline on Azure",
+    "category": "Cloud Architecture",
+    "date": "2026-08-19",
+    "industry": "Financial Services",
+    "problem_id": "finance_regulatory_reporting",
+    "diagram_style": "concept"
   }
 ]
