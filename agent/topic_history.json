@@ -1,10 +1,5 @@
 [
   {
-    "topic": "Optimizing Retail Order Fulfillment with Azure Integration Services",
-    "category": "Azure Integration",
-    "date": "2026-07-31"
-  },
-  {
     "topic": "Real-time Personalization",
     "category": "Enterprise AI",
     "date": "2026-08-01",
@@ -151,5 +146,13 @@
     "industry": "Financial Services",
     "problem_id": "finance_regulatory_reporting",
     "diagram_style": "concept"
+  },
+  {
+    "topic": "AI\u2011driven claims triage",
+    "category": "Enterprise AI",
+    "date": "2026-08-20",
+    "industry": "Healthcare",
+    "problem_id": "healthcare_claims_backlog",
+    "diagram_style": "architecture"
   }
 ]
