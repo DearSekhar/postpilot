@@ -1,12 +1,5 @@
 [
   {
-    "topic": "Real-time Personalization",
-    "category": "Enterprise AI",
-    "date": "2026-08-01",
-    "industry": "Retail & E-commerce",
-    "problem_id": "retail_personalization_latency"
-  },
-  {
     "topic": "Real-time Fraud Detection in Financial Services",
     "category": "Cloud Architecture",
     "date": "2026-08-02",
@@ -154,5 +147,13 @@
     "industry": "Healthcare",
     "problem_id": "healthcare_claims_backlog",
     "diagram_style": "architecture"
+  },
+  {
+    "topic": "Real\u2011time Shipment Visibility",
+    "category": "Distributed Systems",
+    "date": "2026-08-21",
+    "industry": "Supply Chain & Logistics",
+    "problem_id": "supplychain_visibility",
+    "diagram_style": "hierarchy"
   }
 ]
