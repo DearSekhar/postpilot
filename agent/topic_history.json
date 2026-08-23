@@ -1,12 +1,5 @@
 [
   {
-    "topic": "Standardizing Healthcare Data Exchange",
-    "category": "Enterprise AI",
-    "date": "2026-08-03",
-    "industry": "Healthcare",
-    "problem_id": "healthcare_interop"
-  },
-  {
     "topic": "Real-time Shipment Tracking",
     "category": "Azure Integration",
     "date": "2026-08-04",
@@ -156,5 +149,13 @@
     "industry": "Manufacturing",
     "problem_id": "manufacturing_predictive_maintenance",
     "diagram_style": "concept"
+  },
+  {
+    "topic": "Event-driven inventory synchronization",
+    "category": "Azure Integration",
+    "date": "2026-08-23",
+    "industry": "Retail & E-commerce",
+    "problem_id": "retail_inventory_sync",
+    "diagram_style": "architecture"
   }
 ]
