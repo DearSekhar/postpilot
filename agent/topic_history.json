@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Unified Government Services",
-    "category": "Azure Integration",
-    "date": "2026-08-06",
-    "industry": "Public Sector & Utilities",
-    "problem_id": "publicsector_citizen_services",
-    "diagram_style": "architecture"
-  },
-  {
     "topic": "Real-time Inventory Sync",
     "category": "Azure Integration",
     "date": "2026-08-07",
@@ -158,5 +150,13 @@
     "industry": "Healthcare",
     "problem_id": "healthcare_appointment_noshow",
     "diagram_style": "concept"
+  },
+  {
+    "topic": "Seasonal demand forecasting with Azure AI Foundry",
+    "category": "Enterprise AI",
+    "date": "2026-08-26",
+    "industry": "Supply Chain & Logistics",
+    "problem_id": "supplychain_demand_forecast",
+    "diagram_style": "architecture"
   }
 ]
