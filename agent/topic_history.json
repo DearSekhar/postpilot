@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Real-time Inventory Sync",
-    "category": "Azure Integration",
-    "date": "2026-08-07",
-    "industry": "Retail & E-commerce",
-    "problem_id": "retail_inventory_sync",
-    "diagram_style": "hierarchy"
-  },
-  {
     "topic": "Streamlining Loan Underwriting",
     "category": "Enterprise AI",
     "date": "2026-08-08",
@@ -158,5 +150,13 @@
     "industry": "Supply Chain & Logistics",
     "problem_id": "supplychain_demand_forecast",
     "diagram_style": "architecture"
+  },
+  {
+    "topic": "Edge\u2011enabled visual inspection pipeline",
+    "category": "Enterprise AI",
+    "date": "2026-08-27",
+    "industry": "Manufacturing",
+    "problem_id": "manufacturing_quality_inspection",
+    "diagram_style": "hierarchy"
   }
 ]
