@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Streamlining Insurance Claims",
-    "category": "Enterprise AI",
-    "date": "2026-08-09",
-    "industry": "Healthcare",
-    "problem_id": "healthcare_claims_backlog",
-    "diagram_style": "architecture"
-  },
-  {
     "topic": "Real-time Shipment Tracking",
     "category": "Distributed Systems",
     "date": "2026-08-10",
@@ -158,5 +150,13 @@
     "industry": "Public Sector & Utilities",
     "problem_id": "publicsector_citizen_services",
     "diagram_style": "architecture"
+  },
+  {
+    "topic": "Real\u2011time retail recommendations with vector search",
+    "category": "Enterprise AI",
+    "date": "2026-08-29",
+    "industry": "Retail & E-commerce",
+    "problem_id": "retail_personalization_latency",
+    "diagram_style": "hierarchy"
   }
 ]
