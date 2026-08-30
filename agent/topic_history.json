@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Real-time Shipment Tracking",
-    "category": "Distributed Systems",
-    "date": "2026-08-10",
-    "industry": "Supply Chain & Logistics",
-    "problem_id": "supplychain_visibility",
-    "diagram_style": "hierarchy"
-  },
-  {
     "topic": "Predictive Maintenance in Manufacturing",
     "category": "Enterprise AI",
     "date": "2026-08-11",
@@ -158,5 +150,13 @@
     "industry": "Retail & E-commerce",
     "problem_id": "retail_personalization_latency",
     "diagram_style": "hierarchy"
+  },
+  {
+    "topic": "Regulatory reporting pipeline",
+    "category": "Cloud Architecture",
+    "date": "2026-08-30",
+    "industry": "Financial Services",
+    "problem_id": "finance_regulatory_reporting",
+    "diagram_style": "concept"
   }
 ]
