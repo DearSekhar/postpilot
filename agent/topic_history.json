@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Streamlining Patient Record Exchange",
-    "category": "Azure Integration",
-    "date": "2026-08-14",
-    "industry": "Healthcare",
-    "problem_id": "healthcare_interop",
-    "diagram_style": "concept"
-  },
-  {
     "topic": "Early Supplier Disruption Detection",
     "category": "Enterprise AI",
     "date": "2026-08-15",
@@ -158,5 +150,13 @@
     "industry": "Manufacturing",
     "problem_id": "manufacturing_predictive_maintenance",
     "diagram_style": "concept"
+  },
+  {
+    "topic": "Event\u2011driven inventory sync",
+    "category": "Azure Integration",
+    "date": "2026-09-03",
+    "industry": "Retail & E-commerce",
+    "problem_id": "retail_inventory_sync",
+    "diagram_style": "architecture"
   }
 ]
