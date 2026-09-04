@@ -1,140 +1,162 @@
 [
   {
-    "topic": "AI-Driven Knowledge Graphs",
-    "category": "unknown",
-    "date": ""
-  },
-  {
-    "topic": "AI-Driven Content Generation",
-    "category": "unknown",
-    "date": ""
-  },
-  {
-    "topic": "Continuous Learning in AI Models",
-    "category": "unknown",
-    "date": ""
-  },
-  {
-    "topic": "AI Model Serving",
-    "category": "unknown",
-    "date": ""
-  },
-  {
-    "topic": "Scalable Azure Integration",
-    "category": "Azure Integration",
-    "date": "2026-07-30"
-  },
-  {
-    "topic": "Optimizing Retail Order Fulfillment with Azure Integration Services",
-    "category": "Azure Integration",
-    "date": "2026-07-31"
-  },
-  {
-    "topic": "Real-time Personalization",
+    "topic": "Edge AI for Visual Inspection",
     "category": "Enterprise AI",
-    "date": "2026-08-01",
-    "industry": "Retail & E-commerce",
-    "problem_id": "retail_personalization_latency"
-  },
-  {
-    "topic": "Real-time Fraud Detection in Financial Services",
-    "category": "Cloud Architecture",
-    "date": "2026-08-02",
-    "industry": "Financial Services",
-    "problem_id": "finance_fraud_latency"
-  },
-  {
-    "topic": "Standardizing Healthcare Data Exchange",
-    "category": "Enterprise AI",
-    "date": "2026-08-03",
-    "industry": "Healthcare",
-    "problem_id": "healthcare_interop"
-  },
-  {
-    "topic": "Real-time Shipment Tracking",
-    "category": "Azure Integration",
-    "date": "2026-08-04",
-    "industry": "Supply Chain & Logistics",
-    "problem_id": "supplychain_visibility"
-  },
-  {
-    "topic": "Automating Quality Inspection in Manufacturing",
-    "category": "Enterprise AI",
-    "date": "2026-08-05",
+    "date": "2026-08-16",
     "industry": "Manufacturing",
     "problem_id": "manufacturing_quality_inspection",
     "diagram_style": "hierarchy"
   },
   {
-    "topic": "Unified Government Services",
+    "topic": "Unified API gateway for citizen services",
     "category": "Azure Integration",
-    "date": "2026-08-06",
+    "date": "2026-08-17",
     "industry": "Public Sector & Utilities",
     "problem_id": "publicsector_citizen_services",
     "diagram_style": "architecture"
   },
   {
-    "topic": "Real-time Inventory Sync",
+    "topic": "Unified Customer 360 with Azure Integration",
     "category": "Azure Integration",
-    "date": "2026-08-07",
+    "date": "2026-08-18",
     "industry": "Retail & E-commerce",
-    "problem_id": "retail_inventory_sync",
+    "problem_id": "retail_omnichannel_data",
     "diagram_style": "hierarchy"
   },
   {
-    "topic": "Streamlining Loan Underwriting",
-    "category": "Enterprise AI",
-    "date": "2026-08-08",
+    "topic": "Regulatory reporting pipeline on Azure",
+    "category": "Cloud Architecture",
+    "date": "2026-08-19",
     "industry": "Financial Services",
-    "problem_id": "finance_document_processing",
+    "problem_id": "finance_regulatory_reporting",
     "diagram_style": "concept"
   },
   {
-    "topic": "Streamlining Insurance Claims",
+    "topic": "AI\u2011driven claims triage",
     "category": "Enterprise AI",
-    "date": "2026-08-09",
+    "date": "2026-08-20",
     "industry": "Healthcare",
     "problem_id": "healthcare_claims_backlog",
     "diagram_style": "architecture"
   },
   {
-    "topic": "Real-time Shipment Tracking",
+    "topic": "Real\u2011time Shipment Visibility",
     "category": "Distributed Systems",
-    "date": "2026-08-10",
+    "date": "2026-08-21",
     "industry": "Supply Chain & Logistics",
     "problem_id": "supplychain_visibility",
     "diagram_style": "hierarchy"
   },
   {
-    "topic": "Predictive Maintenance in Manufacturing",
+    "topic": "Predictive Maintenance with Azure AI Foundry",
     "category": "Enterprise AI",
-    "date": "2026-08-11",
+    "date": "2026-08-22",
     "industry": "Manufacturing",
     "problem_id": "manufacturing_predictive_maintenance",
     "diagram_style": "concept"
   },
   {
-    "topic": "Real-time Personalization",
-    "category": "Enterprise AI",
-    "date": "2026-08-12",
+    "topic": "Event-driven inventory synchronization",
+    "category": "Azure Integration",
+    "date": "2026-08-23",
     "industry": "Retail & E-commerce",
-    "problem_id": "retail_personalization_latency",
+    "problem_id": "retail_inventory_sync",
     "diagram_style": "architecture"
   },
   {
-    "topic": "Regulatory Reporting in Financial Services",
+    "topic": "Audit\u2011Ready Data Lineage for AML Reporting",
     "category": "Cloud Architecture",
-    "date": "2026-08-13",
+    "date": "2026-08-24",
     "industry": "Financial Services",
     "problem_id": "finance_regulatory_reporting",
     "diagram_style": "hierarchy"
   },
   {
-    "topic": "Streamlining Patient Record Exchange",
-    "category": "Azure Integration",
-    "date": "2026-08-14",
+    "topic": "Personalized appointment reminder pipeline",
+    "category": "Enterprise AI",
+    "date": "2026-08-25",
     "industry": "Healthcare",
-    "problem_id": "healthcare_interop",
+    "problem_id": "healthcare_appointment_noshow",
     "diagram_style": "concept"
+  },
+  {
+    "topic": "Seasonal demand forecasting with Azure AI Foundry",
+    "category": "Enterprise AI",
+    "date": "2026-08-26",
+    "industry": "Supply Chain & Logistics",
+    "problem_id": "supplychain_demand_forecast",
+    "diagram_style": "architecture"
+  },
+  {
+    "topic": "Edge\u2011enabled visual inspection pipeline",
+    "category": "Enterprise AI",
+    "date": "2026-08-27",
+    "industry": "Manufacturing",
+    "problem_id": "manufacturing_quality_inspection",
+    "diagram_style": "hierarchy"
+  },
+  {
+    "topic": "Unified citizen services integration",
+    "category": "Azure Integration",
+    "date": "2026-08-28",
+    "industry": "Public Sector & Utilities",
+    "problem_id": "publicsector_citizen_services",
+    "diagram_style": "architecture"
+  },
+  {
+    "topic": "Real\u2011time retail recommendations with vector search",
+    "category": "Enterprise AI",
+    "date": "2026-08-29",
+    "industry": "Retail & E-commerce",
+    "problem_id": "retail_personalization_latency",
+    "diagram_style": "hierarchy"
+  },
+  {
+    "topic": "Regulatory reporting pipeline",
+    "category": "Cloud Architecture",
+    "date": "2026-08-30",
+    "industry": "Financial Services",
+    "problem_id": "finance_regulatory_reporting",
+    "diagram_style": "concept"
+  },
+  {
+    "topic": "AI\u2011augmented claims adjudication",
+    "category": "Enterprise AI",
+    "date": "2026-08-31",
+    "industry": "Healthcare",
+    "problem_id": "healthcare_claims_backlog",
+    "diagram_style": "architecture"
+  },
+  {
+    "topic": "Real-time shipment visibility pipeline",
+    "category": "Distributed Systems",
+    "date": "2026-09-01",
+    "industry": "Supply Chain & Logistics",
+    "problem_id": "supplychain_visibility",
+    "diagram_style": "hierarchy"
+  },
+  {
+    "topic": "Predictive Maintenance with Azure AI Foundry",
+    "category": "Enterprise AI",
+    "date": "2026-09-02",
+    "industry": "Manufacturing",
+    "problem_id": "manufacturing_predictive_maintenance",
+    "diagram_style": "concept"
+  },
+  {
+    "topic": "Event\u2011driven inventory sync",
+    "category": "Azure Integration",
+    "date": "2026-09-03",
+    "industry": "Retail & E-commerce",
+    "problem_id": "retail_inventory_sync",
+    "diagram_style": "architecture"
+  },
+  {
+    "topic": "Audit\u2011ready regulatory reporting pipeline",
+    "category": "Cloud Architecture",
+    "date": "2026-09-04",
+    "industry": "Financial Services",
+    "problem_id": "finance_regulatory_reporting",
+    "diagram_style": "hierarchy"
   }
 ]
