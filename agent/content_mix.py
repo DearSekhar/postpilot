@@ -53,7 +53,39 @@ def suggest_diagram_style(recent_posts: list, style_mix: dict | None = None, win
     return suggest_weighted(style_mix or DEFAULT_DIAGRAM_STYLE_MIX, recent_posts, field="diagram_style", window=window)
 
 
-def pick_problem(industry: str, category: str, problems_by_industry: dict, recent_posts: list, window: int = 10) -> dict | None:
+def pick_problem(industry: str, category: str, problems_by_industry: dict, recent_posts: list, window: int = 30) -> dict | None:
+    """Picks a business problem for the given industry, strongly preferring
+    one not used recently — freshness is checked over a wide window (30 by
+    default, deliberately wider than the category/industry mix window) since
+    an exact problem repeat is worse than a slight category mismatch.
+
+    Fallback chain (each step only runs if the previous finds nothing):
+    1. same industry + matching category + not recently used
+    2. same industry + ANY category + not recently used   <- freshness beats category match
+    3. same industry + matching category, reuse allowed   <- last resort within category
+    4. same industry, any, reuse allowed                  <- true last resort (catalog exhausted)
+
+    Returns the chosen problem with an extra "_is_reuse" key (True only if
+    steps 3/4 fired) so the caller can tell the model it's revisiting a
+    problem and should find a genuinely different angle.
+    """
+    all_candidates = problems_by_industry.get(industry, [])
+    if not all_candidates:
+        return None
+
+    recent_ids = {p.get("problem_id") for p in recent_posts[-window:] if p.get("problem_id")}
+
+    category_matches = [p for p in all_candidates if p.get("category") == category]
+    fresh_category_matches = [p for p in category_matches if p["id"] not in recent_ids]
+    if fresh_category_matches:
+        return {**random.choice(fresh_category_matches), "_is_reuse": False}
+
+    fresh_any = [p for p in all_candidates if p["id"] not in recent_ids]
+    if fresh_any:
+        return {**random.choice(fresh_any), "_is_reuse": False}
+
+    choice = random.choice(category_matches or all_candidates)
+    return {**choice, "_is_reuse": True}
     """Picks a business problem for the given industry that matches the
     suggested category where possible, preferring one not used in the
     recent window (tracked via problem_id in topic_history).

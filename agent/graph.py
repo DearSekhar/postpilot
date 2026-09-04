@@ -94,29 +94,24 @@ about a flagged issue gets "alert".
 """
 
 BUSINESS_PROBLEM_TEMPLATE = """
-Suggested business problem for this post (a strong starting point — use it unless you have \
-a genuinely better, equally specific and real business problem in the same industry in mind):
+Example business problem for this industry (seed inspiration, grounded in a real pattern \
+for this vertical — NOT a mandate to reuse verbatim):
 - Industry: {industry}
 - Problem: {problem}
 - Why it's genuinely hard: {why_hard}
-- Suggested solution direction (Azure/AI services and pattern — you may extend or adjust this \
-if a better fit occurs to you): {solution_pattern}
+- Suggested solution direction: {solution_pattern}
 
-You may either:
-(a) Use the suggested problem above — write it in your own words, don't copy these lines \
-verbatim, and set "is_new": false in business_problem, echoing back a version of this problem \
-in the JSON fields.
-(b) Invent a different, comparably specific and realistic business problem in the SAME industry \
-({industry}) if you genuinely have a sharper or fresher one — set "is_new": true, and fill in \
-"problem" / "why_hard" / "solution_pattern" with your own specific, real-world business problem \
-(not a vague topic restatement — it must be as concrete as the example above). Only do this when \
-you have something genuinely good; don't invent for the sake of variety alone.
-
-Either way: open the post by grounding it in a real business problem (a concrete, illustrative \
-scenario in this industry is good — you don't need a named real company). Explain what makes it \
-hard for that industry specifically, not just in generic engineering terms. Then walk through the \
-solution with specific Azure/AI services and why they fit. The value of the post is the business \
-insight, not a feature announcement — do not frame this as "Microsoft just released X."
+This catalog grows over time from problems you invent, so don't default to reusing this \
+example out of inertia. You may either:
+(a) Use it as a strong starting point — write it in your own words, set "is_new": false.
+(b) Invent a different, comparably specific and realistic business problem in the SAME \
+industry ({industry}) — set "is_new": true. Prefer this whenever you have a genuinely good, \
+concrete alternative; this is equally valid, not a fallback.
+{reuse_directive}
+Either way: open the post by grounding it in a real business problem. Explain what makes it \
+hard for that industry specifically. Then walk through the solution with specific Azure/AI \
+services and why they fit. The value of the post is the business insight, not a feature \
+announcement.
 """
 
 USER_PROMPT = (
@@ -224,17 +219,24 @@ def generate_draft(state: AgentState) -> AgentState:
             problems_by_industry, recent_posts,
         )
         if chosen_problem:
-            # The problem's own category tag is authoritative from here on —
-            # it reflects what the post will actually be about, so the model
-            # doesn't get to pick a different category than the content matches.
             locked_category = chosen_problem.get("category")
             if locked_category:
                 category_hint = f"(Category is fixed for this post: {locked_category} — use exactly this value)"
+            reuse_directive = ""
+            if chosen_problem.get("_is_reuse"):
+                reuse_directive = (
+                    "\nThis specific example was already covered in a recent post, and this "
+                    "industry's catalog is thin in this category — strongly prefer option (b) "
+                    "and invent a genuinely different, comparably specific problem for this "
+                    "industry rather than reusing this one. Only fall back to reusing it if you "
+                    "truly cannot think of a good alternative.\n"
+                )
             business_problem_section = BUSINESS_PROBLEM_TEMPLATE.format(
                 industry=chosen_industry,
                 problem=chosen_problem["problem"],
                 why_hard=chosen_problem["why_hard"],
                 solution_pattern=chosen_problem["solution_pattern"],
+                reuse_directive=reuse_directive,
             )
             industry_field_hint = chosen_industry
     else:
