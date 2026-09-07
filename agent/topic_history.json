@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Unified Customer 360 with Azure Integration",
-    "category": "Azure Integration",
-    "date": "2026-08-18",
-    "industry": "Retail & E-commerce",
-    "problem_id": "retail_omnichannel_data",
-    "diagram_style": "hierarchy"
-  },
-  {
     "topic": "Regulatory reporting pipeline on Azure",
     "category": "Cloud Architecture",
     "date": "2026-08-19",
@@ -158,5 +150,13 @@
     "industry": "Supply Chain & Logistics",
     "problem_id": "supplychain_supplier_risk",
     "diagram_style": "architecture"
+  },
+  {
+    "topic": "AI\u2011driven production line rebalancing",
+    "category": "Enterprise AI",
+    "date": "2026-09-07",
+    "industry": "Manufacturing",
+    "problem_id": "frequent_sku_mix_changes_force",
+    "diagram_style": "hierarchy"
   }
 ]
