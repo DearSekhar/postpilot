@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Regulatory reporting pipeline on Azure",
-    "category": "Cloud Architecture",
-    "date": "2026-08-19",
-    "industry": "Financial Services",
-    "problem_id": "finance_regulatory_reporting",
-    "diagram_style": "concept"
-  },
-  {
     "topic": "AI\u2011driven claims triage",
     "category": "Enterprise AI",
     "date": "2026-08-20",
@@ -158,5 +150,13 @@
     "industry": "Manufacturing",
     "problem_id": "frequent_sku_mix_changes_force",
     "diagram_style": "hierarchy"
+  },
+  {
+    "topic": "Localized demand forecasting for utilities",
+    "category": "Enterprise AI",
+    "date": "2026-09-08",
+    "industry": "Public Sector & Utilities",
+    "problem_id": "utilities_grid_demand",
+    "diagram_style": "architecture"
   }
 ]
