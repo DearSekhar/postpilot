@@ -1,13 +1,5 @@
 [
   {
-    "topic": "AI\u2011driven claims triage",
-    "category": "Enterprise AI",
-    "date": "2026-08-20",
-    "industry": "Healthcare",
-    "problem_id": "healthcare_claims_backlog",
-    "diagram_style": "architecture"
-  },
-  {
     "topic": "Real\u2011time Shipment Visibility",
     "category": "Distributed Systems",
     "date": "2026-08-21",
@@ -158,5 +150,13 @@
     "industry": "Public Sector & Utilities",
     "problem_id": "utilities_grid_demand",
     "diagram_style": "architecture"
+  },
+  {
+    "topic": "Unified Customer 360 with Azure Integration Services",
+    "category": "Azure Integration",
+    "date": "2026-09-09",
+    "industry": "Retail & E-commerce",
+    "problem_id": "retail_omnichannel_data",
+    "diagram_style": "hierarchy"
   }
 ]
