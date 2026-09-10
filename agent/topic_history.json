@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Real\u2011time Shipment Visibility",
-    "category": "Distributed Systems",
-    "date": "2026-08-21",
-    "industry": "Supply Chain & Logistics",
-    "problem_id": "supplychain_visibility",
-    "diagram_style": "hierarchy"
-  },
-  {
     "topic": "Predictive Maintenance with Azure AI Foundry",
     "category": "Enterprise AI",
     "date": "2026-08-22",
@@ -158,5 +150,13 @@
     "industry": "Retail & E-commerce",
     "problem_id": "retail_omnichannel_data",
     "diagram_style": "hierarchy"
+  },
+  {
+    "topic": "AI-powered loan underwriting",
+    "category": "Enterprise AI",
+    "date": "2026-09-10",
+    "industry": "Financial Services",
+    "problem_id": "finance_document_processing",
+    "diagram_style": "concept"
   }
 ]
