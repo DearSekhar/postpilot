@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Event-driven inventory synchronization",
-    "category": "Azure Integration",
-    "date": "2026-08-23",
-    "industry": "Retail & E-commerce",
-    "problem_id": "retail_inventory_sync",
-    "diagram_style": "architecture"
-  },
-  {
     "topic": "Audit\u2011Ready Data Lineage for AML Reporting",
     "category": "Cloud Architecture",
     "date": "2026-08-24",
@@ -158,5 +150,13 @@
     "industry": "Healthcare",
     "problem_id": "hospitals_must_share_radiology_studies",
     "diagram_style": "architecture"
+  },
+  {
+    "topic": "Real-time temperature compliance in perishable logistics",
+    "category": "Distributed Systems",
+    "date": "2026-09-12",
+    "industry": "Supply Chain & Logistics",
+    "problem_id": "carriers_moving_temperature_sensitive_cargo",
+    "diagram_style": "hierarchy"
   }
 ]
