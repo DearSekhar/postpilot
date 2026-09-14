@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Personalized appointment reminder pipeline",
-    "category": "Enterprise AI",
-    "date": "2026-08-25",
-    "industry": "Healthcare",
-    "problem_id": "healthcare_appointment_noshow",
-    "diagram_style": "concept"
-  },
-  {
     "topic": "Seasonal demand forecasting with Azure AI Foundry",
     "category": "Enterprise AI",
     "date": "2026-08-26",
@@ -158,5 +150,13 @@
     "industry": "Manufacturing",
     "problem_id": "high_speed_visual_inspection_lines",
     "diagram_style": "concept"
+  },
+  {
+    "topic": "Real-time Return Fraud Scoring",
+    "category": "Enterprise AI",
+    "date": "2026-09-14",
+    "industry": "Retail & E-commerce",
+    "problem_id": "retail_returns_fraud",
+    "diagram_style": "architecture"
   }
 ]
