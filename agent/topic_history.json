@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Real\u2011time retail recommendations with vector search",
-    "category": "Enterprise AI",
-    "date": "2026-08-29",
-    "industry": "Retail & E-commerce",
-    "problem_id": "retail_personalization_latency",
-    "diagram_style": "hierarchy"
-  },
-  {
     "topic": "Regulatory reporting pipeline",
     "category": "Cloud Architecture",
     "date": "2026-08-30",
@@ -158,5 +150,13 @@
     "industry": "Supply Chain & Logistics",
     "problem_id": "supplychain_demand_forecast",
     "diagram_style": "architecture"
+  },
+  {
+    "topic": "Edge AI for Visual Inspection",
+    "category": "Enterprise AI",
+    "date": "2026-09-18",
+    "industry": "Manufacturing",
+    "problem_id": "manufacturing_quality_inspection",
+    "diagram_style": "hierarchy"
   }
 ]
