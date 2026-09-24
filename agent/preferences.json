@@ -1,7 +1,7 @@
 {
   "min_words": 150,
   "max_words": 300,
-  "tone": "Professional, practical, written like an experienced Solution Architect sharing engineering insights rather than marketing content.",
+  "tone": "Confident and opinionated, like a senior architect talking to peers over coffee. Short sentences. Take a clear position. Plain language over jargon.",
   "target_audience": ["Software Engineers", "Solution Architects", "Cloud Architects", "AI Engineers", "Engineering Managers"],
   "primary_domains": ["Azure AI", "Enterprise AI", "Azure Integration Services", "Azure API Management", "Azure Functions", "Azure Service Bus", "Azure Event Grid", "Logic Apps", "Cloud Architecture", "Enterprise Architecture", "Distributed Systems", "Application Modernization", "Python", ".NET"],
   "preferred_ai_topics": ["Agentic AI", "Azure AI Foundry", "MCP", "A2A", "RAG", "Semantic Kernel", "Azure AI Search", "LLMOps", "AI Observability", "Prompt Flow", "Vector Search", "Knowledge Graphs"],
@@ -18,8 +18,18 @@
       "Performance & Observability": 10,
       "Career & Leadership": 5
   },
+  "post_formats": {
+    "contrarian_take": "Open with a claim many architects would disagree with. Defend it with one concrete reason and admit one trade-off.",
+    "common_mistake": "Name ONE specific mistake teams make, show exactly what breaks in production, then the fix.",
+    "x_vs_y": "Head-to-head comparison of two options (e.g. Service Bus vs Event Grid, RAG vs fine-tuning). End with a one-line decision rule.",
+    "numbered_lessons": "3-5 numbered, punchy lessons on one topic. Each is one bold line plus one sentence of why.",
+    "myth_vs_reality": "Pick a popular belief about cloud/AI and take it apart with specifics.",
+    "cost_or_perf_numbers": "Lead with a concrete (illustrative, clearly hypothetical) number. Show where the cost/latency actually comes from and how to cut it.",
+    "news_reaction": "React to one headline from the provided news context: what it actually changes for architects.",
+    "industry_problem": "Real business problem in a specific industry, then why it's hard, then the solution pattern."
+  },
   "notes": [
-    "Structure posts around a real business problem, ideally grounded in a concrete industry example or scenario (e.g. a retailer handling order spikes, a bank modernizing legacy integration), rather than a generic topic overview. Open with the problem and its business impact, then walk through how Azure/AI services solve it, referencing specific services and why they fit — not just what they do in the abstract.",
+    "Vary the angle. Some posts are opinions, some are comparisons, some are lessons. A business scenario is one option, not a requirement.",
     "The closing discussion question should be sharper and more specific to the scenario just discussed, not a generic prompt like 'What are some key considerations when designing X?'. It should invite a real opinion or experience, e.g. asking readers to weigh in on a tradeoff, share how they solved a similar problem, or challenge an assumption made in the post."
   ]
 }

@@ -19,7 +19,7 @@ def load_recent_posts() -> list[dict]:
     return [d if isinstance(d, dict) else {"topic": d, "category": "unknown", "date": ""} for d in data]
 
 
-def record_post(topic: str, category: str, industry: str | None = None, problem_id: str | None = None, diagram_style: str | None = None) -> None:
+def record_post(topic: str, category: str, industry: str | None = None, problem_id: str | None = None, diagram_style: str | None = None, post_format: str | None = None) -> None:
     history = load_recent_posts()
     entry = {"topic": topic, "category": category, "date": date.today().isoformat()}
     if industry:
@@ -28,6 +28,8 @@ def record_post(topic: str, category: str, industry: str | None = None, problem_
         entry["problem_id"] = problem_id
     if diagram_style:
         entry["diagram_style"] = diagram_style
+    if post_format:
+        entry["post_format"] = post_format
     history.append(entry)
     history = history[-MAX_HISTORY:]
     with open(HISTORY_PATH, "w") as f:

@@ -1,6 +1,7 @@
 import base64
 import json
 import os
+import random
 from typing import Optional, TypedDict
 
 from langgraph.graph import StateGraph, END
@@ -26,7 +27,7 @@ Preferred post styles (pick whichever best fits the topic):
 {preferred_post_types}
 
 Tone: {tone}
-
+{post_format_section}
 Hard rules:
 - body_text must be between {min_words} and {max_words} words. Do not fall short of the minimum.
 - Format body_text as 2-4 short paragraphs separated by a blank line (\\n\\n) — do not write it as one dense block.
@@ -34,6 +35,12 @@ Hard rules:
 face and what the technology offers. Do NOT write in first person as if you personally built or \
 experienced this ('I've found', 'in my project', 'we applied this'). No fabricated anecdotes or personal claims.
 - Never use these phrases or close variants of them: {avoid_phrases}
+- The FIRST sentence of body_text is the hook: at most 12 words, a specific claim, a surprising \
+contrast, or a pointed question. It must make sense standing alone, without the rest of the post.
+- Never open with "In today's…", "Imagine…", "As organizations…", or by restating the topic/title.
+- The "topic" field must not start with "Real-time" or "AI-driven", and must not end with "with Azure".
+- Don't force Azure/AI product names into every post — name specific services only when they're \
+genuinely the point of the post.
 {discussion_question_rule}
 {business_problem_section}
 {news_context_section}
@@ -182,10 +189,29 @@ def _save_new_problem(industry: str, category: str, problem: dict) -> str:
         return None
 
 
+POST_FORMAT_FALLBACK = "common_mistake"
+
+
+def _suggest_post_format(formats: dict, recent_posts: list) -> Optional[str]:
+    """Rotates through post_formats by least-recently-used, the same way
+    diagram style is balanced — so the post's whole shape varies day to
+    day instead of always defaulting to the industry-problem template."""
+    if not formats:
+        return None
+    window = recent_posts[-len(formats):]
+    recent_formats = [p.get("post_format") for p in window]
+    unused = [f for f in formats if f not in recent_formats]
+    return random.choice(unused) if unused else random.choice(list(formats))
+
+
 def generate_draft(state: AgentState) -> AgentState:
     prefs = state["preferences"]
     recent_posts = topic_history.load_recent_posts()
     mix_targets = prefs.get("content_mix", {})
+
+    post_formats = prefs.get("post_formats", {})
+    post_format = _suggest_post_format(post_formats, recent_posts)
+    use_industry_problem = (not post_formats) or (post_format == "industry_problem")
 
     category_hint = ""
     if mix_targets:
@@ -212,7 +238,7 @@ def generate_draft(state: AgentState) -> AgentState:
     business_problem_section = ""
     industry_field_hint = "leave blank if not applicable"
 
-    if industry_mix and problems_by_industry:
+    if use_industry_problem and industry_mix and problems_by_industry:
         chosen_industry = content_mix.suggest_industry(industry_mix, recent_posts)
         chosen_problem = content_mix.pick_problem(
             chosen_industry, content_mix.suggest_category(mix_targets, recent_posts) if mix_targets else None,
@@ -239,11 +265,17 @@ def generate_draft(state: AgentState) -> AgentState:
                 reuse_directive=reuse_directive,
             )
             industry_field_hint = chosen_industry
-    else:
+    elif use_industry_problem:
         business_problem_section = (
             "\nNo curated business problem is available this run — omit the industry and "
             "business_problem fields (leave industry null, business_problem null) and write "
             "a solid post on a topic that fits the category guidance.\n"
+        )
+    else:
+        business_problem_section = (
+            "\nToday's post format is NOT industry_problem — do not force a business-problem "
+            "framing. Set \"industry\": null and \"business_problem\": null in your response, "
+            "and write the post purely according to the POST FORMAT instructions above.\n"
         )
 
     # Optional real-world context (Azure updates, security news) — never a
@@ -257,6 +289,17 @@ def generate_draft(state: AgentState) -> AgentState:
     except Exception as e:
         print(f"Warning: news_context lookup failed, continuing without it. {e}")
 
+    if post_format == "news_reaction" and not news_context_section:
+        post_format = POST_FORMAT_FALLBACK
+
+    post_format_section = (
+        f"\nPOST FORMAT FOR TODAY (this determines the whole shape and opening of the post — "
+        f"follow it specifically, don't default back to the generic industry-problem template): "
+        f"{post_format} — {post_formats[post_format]}\n"
+        if post_format
+        else ""
+    )
+
     suggested_diagram_style = content_mix.suggest_diagram_style(
         recent_posts, prefs.get("diagram_style_mix")
     )
@@ -267,6 +310,7 @@ def generate_draft(state: AgentState) -> AgentState:
         preferred_ai_topics=", ".join(prefs.get("preferred_ai_topics", [])) or "none specified",
         preferred_post_types=", ".join(prefs.get("preferred_post_types", [])) or "none specified",
         tone=prefs.get("tone", "direct, practical"),
+        post_format_section=post_format_section,
         min_words=prefs.get("min_words", 150),
         max_words=prefs.get("max_words", 300),
         avoid_phrases=", ".join(prefs.get("avoid_phrases", [])) or "none",
@@ -277,7 +321,7 @@ def generate_draft(state: AgentState) -> AgentState:
         category_hint=category_hint,
         recent_posts="\n".join(
             f"- {p['topic']} ({p.get('category', '?')}, industry: {p.get('industry', '?')}, {p.get('date', '?')})"
-            for p in recent_posts[-5:]
+            for p in recent_posts[-15:]
         )
         or "none yet — this is the first post",
         notes="\n".join(f"- {n}" for n in prefs.get("notes", [])) or "none yet",
@@ -311,6 +355,7 @@ def generate_draft(state: AgentState) -> AgentState:
                 industry=chosen_industry,
                 problem_id=problem_id,
                 diagram_style=draft.diagram.style,
+                post_format=post_format,
             )
             return {**state, "draft": draft}
         except (ValueError, ValidationError) as e:
