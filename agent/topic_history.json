@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Audit\u2011ready regulatory reporting pipeline",
-    "category": "Cloud Architecture",
-    "date": "2026-09-04",
-    "industry": "Financial Services",
-    "problem_id": "finance_regulatory_reporting",
-    "diagram_style": "hierarchy"
-  },
-  {
     "topic": "FHIR Integration with Azure",
     "category": "Azure Integration",
     "date": "2026-09-05",
@@ -158,5 +150,12 @@
     "industry": "Supply Chain & Logistics",
     "problem_id": "supplychain_visibility",
     "diagram_style": "hierarchy"
+  },
+  {
+    "topic": "Vector Search Cost Reduction",
+    "category": "Performance & Observability",
+    "date": "2026-09-24",
+    "diagram_style": "concept",
+    "post_format": "cost_or_perf_numbers"
   }
 ]
