@@ -1,13 +1,5 @@
 [
   {
-    "topic": "FHIR Integration with Azure",
-    "category": "Azure Integration",
-    "date": "2026-09-05",
-    "industry": "Healthcare",
-    "problem_id": "healthcare_interop",
-    "diagram_style": "concept"
-  },
-  {
     "topic": "Supplier risk early warning",
     "category": "Enterprise AI",
     "date": "2026-09-06",
@@ -157,5 +149,12 @@
     "date": "2026-09-24",
     "diagram_style": "concept",
     "post_format": "cost_or_perf_numbers"
+  },
+  {
+    "topic": "Azure Functions vs App Service for API backends",
+    "category": "Cloud Architecture",
+    "date": "2026-09-25",
+    "diagram_style": "architecture",
+    "post_format": "contrarian_take"
   }
 ]
