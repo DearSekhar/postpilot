@@ -1,13 +1,5 @@
 [
   {
-    "topic": "AI\u2011driven production line rebalancing",
-    "category": "Enterprise AI",
-    "date": "2026-09-07",
-    "industry": "Manufacturing",
-    "problem_id": "frequent_sku_mix_changes_force",
-    "diagram_style": "hierarchy"
-  },
-  {
     "topic": "Localized demand forecasting for utilities",
     "category": "Enterprise AI",
     "date": "2026-09-08",
@@ -155,5 +147,12 @@
     "date": "2026-09-26",
     "diagram_style": "hierarchy",
     "post_format": "numbered_lessons"
+  },
+  {
+    "topic": "Container Apps Sandboxes Impact",
+    "category": "Cloud Architecture",
+    "date": "2026-09-26",
+    "diagram_style": "concept",
+    "post_format": "news_reaction"
   }
 ]
