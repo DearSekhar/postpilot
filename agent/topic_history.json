@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Supplier risk early warning",
-    "category": "Enterprise AI",
-    "date": "2026-09-06",
-    "industry": "Supply Chain & Logistics",
-    "problem_id": "supplychain_supplier_risk",
-    "diagram_style": "architecture"
-  },
-  {
     "topic": "AI\u2011driven production line rebalancing",
     "category": "Enterprise AI",
     "date": "2026-09-07",
@@ -156,5 +148,12 @@
     "date": "2026-09-25",
     "diagram_style": "architecture",
     "post_format": "contrarian_take"
+  },
+  {
+    "topic": "RAG pipeline observability",
+    "category": "Performance & Observability",
+    "date": "2026-09-26",
+    "diagram_style": "hierarchy",
+    "post_format": "numbered_lessons"
   }
 ]
