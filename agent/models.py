@@ -8,6 +8,24 @@ def _truncate(text: str, max_len: int) -> str:
     return text[: max_len - 1].rstrip() + "…"
 
 
+# LLMs frequently emit "smart"/typographic punctuation regardless of prompt
+# instructions not to. LinkedIn's post API is picky about special characters
+# (see review notes), so normalize to plain ASCII equivalents rather than
+# relying on the model to comply every time.
+_PUNCT_NORMALIZE = {
+    "‘": "'", "’": "'",  # curly single quotes
+    "“": '"', "”": '"',  # curly double quotes
+    "‑": "-", "–": "-",  # non-breaking hyphen, en dash
+    " ": " ",  # non-breaking space
+}
+
+
+def _normalize_punctuation(text: str) -> str:
+    for bad, good in _PUNCT_NORMALIZE.items():
+        text = text.replace(bad, good)
+    return text
+
+
 KNOWN_ICONS = {
     "user", "database", "cloud", "camera", "shield", "check", "alert",
     "server", "mail", "chart", "factory", "hospital", "gear", "lock",
@@ -67,6 +85,23 @@ class PostDraft(BaseModel):
     body_text: str
     hashtags: List[str] = Field(default_factory=list, max_length=5)
     diagram: DiagramSpec
+
+    @field_validator("body_text", mode="before")
+    @classmethod
+    def fix_literal_escapes(cls, v):
+        # Some models over-escape when told to type \n as a JSON escape
+        # sequence, producing \\n in the raw JSON — which correctly parses to
+        # the literal two characters "\n" as visible text instead of a real
+        # line break. Normalize any leftover literal escapes regardless of
+        # how they got there.
+        if isinstance(v, str):
+            v = v.replace("\\n", "\n").replace("\\t", "\t")
+        return v
+
+    @field_validator("body_text", "topic", mode="before")
+    @classmethod
+    def normalize_text_punctuation(cls, v):
+        return _normalize_punctuation(v) if isinstance(v, str) else v
 
     @property
     def word_count(self) -> int:

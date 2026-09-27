@@ -1,13 +1,93 @@
 {
   "industry_mix": {
-    "Retail & E-commerce": 20,
-    "Financial Services": 20,
-    "Healthcare": 15,
-    "Supply Chain & Logistics": 15,
-    "Manufacturing": 15,
-    "Public Sector & Utilities": 15
+    "Mortgage & Lending": 15,
+    "Consumer Packaged Goods & Food Manufacturing": 12,
+    "Financial Services": 10,
+    "Healthcare": 10,
+    "Retail & E-commerce": 10,
+    "Supply Chain & Logistics": 8,
+    "Manufacturing": 8,
+    "Insurance": 8,
+    "Energy & Utilities": 7,
+    "Telecommunications": 6,
+    "Public Sector & Government": 4,
+    "Travel & Hospitality": 2
   },
   "problems": {
+    "Mortgage & Lending": [
+      {
+        "id": "mortgage_document_intake",
+        "problem": "Loan origination stalls because borrower documents (pay stubs, tax returns, bank statements, W-2s) arrive in wildly inconsistent formats across channels — email, fax, borrower portal — and loan officers manually classify and key each one before underwriting can even start.",
+        "why_hard": "Document quality and structure vary enormously, a misclassified or mis-keyed field can delay a closing or trigger a compliance exception, and volume can't just pause while someone fixes the backlog.",
+        "solution_pattern": "Azure AI Document Intelligence for classification and extraction at intake, automated routing of low-confidence documents to a human review queue, validation against loan program rules before the file ever reaches underwriting.",
+        "category": "Enterprise AI"
+      },
+      {
+        "id": "mortgage_decisioning_engine",
+        "problem": "Loan modification and workout decisions — which program a borrower qualifies for, what waterfall of options applies — are hard-coded into application logic that takes weeks to update every time investor or federal guidelines change.",
+        "why_hard": "Guidelines change frequently and inconsistently across programs, a wrong decision has real compliance and consumer-harm exposure, and every decision has to stay auditable for regulators years later.",
+        "solution_pattern": "Externalize the rules into a configurable decisioning engine instead of embedding them in code, version rule sets per program, and log a full decision trail per loan so an auditor can reconstruct exactly why a decision was made.",
+        "category": "Cloud Architecture"
+      },
+      {
+        "id": "mortgage_legacy_middleware_retirement",
+        "problem": "A lender's servicing platform still exchanges data with dozens of partners over a decade-old middleware layer, and every new integration takes months because the middleware itself has become the bottleneck.",
+        "why_hard": "The middleware carries regulated, high-volume transaction traffic that can't go down, so any migration has to happen incrementally without ever breaking an in-flight loan transaction.",
+        "solution_pattern": "A strangler-fig migration onto a modern integration platform (API Management plus Service Bus), running old and new paths in parallel with traffic shadowing before cutover, one partner at a time instead of a big-bang rewrite.",
+        "category": "Azure Integration"
+      },
+      {
+        "id": "mortgage_correspondent_onboarding",
+        "problem": "Onboarding a new correspondent lending partner takes weeks of manual file-format mapping, because each partner sends loan data in a slightly different layout with its own business rules.",
+        "why_hard": "Every partner's format and rules are just different enough that a one-size mapping breaks, and lending volume can't pause while a new partner gets integrated.",
+        "solution_pattern": "Treat partner-specific logic as versioned configuration in a mapping engine instead of new code per partner, with a self-service onboarding workflow that validates incoming files against a shared canonical loan schema.",
+        "category": "Distributed Systems"
+      },
+      {
+        "id": "mortgage_servicing_notifications",
+        "problem": "Borrowers in a modification or forbearance process get inconsistent, delayed status updates because notifications are triggered manually by servicing staff at each workflow stage.",
+        "why_hard": "Missing a required notice inside a regulatory window is a compliance violation, but the workflow spans multiple systems — servicing platform, document generation, decisioning — with no single trigger point today.",
+        "solution_pattern": "An event-driven notification pipeline triggered directly off workflow state changes, templated document generation, and delivery tracking so a missed step surfaces immediately instead of silently.",
+        "category": "Azure Integration"
+      }
+    ],
+    "Consumer Packaged Goods & Food Manufacturing": [
+      {
+        "id": "cpg_edi_modernization",
+        "problem": "A food manufacturer's EDI transactions with retail partners — purchase orders, invoices, ship notices — run through an aging on-prem middleware platform that's expensive to maintain and slow to onboard new trading partners onto.",
+        "why_hard": "Retail partners have zero tolerance for order or invoice delays, the middleware is deeply embedded in daily operations, and any migration risk touches live, revenue-generating transactions.",
+        "solution_pattern": "A phased migration from the legacy on-prem platform to a cloud integration suite, running partners in parallel during cutover and retiring the legacy platform one trading partner at a time rather than all at once.",
+        "category": "Azure Integration"
+      },
+      {
+        "id": "cpg_product_data_enrichment",
+        "problem": "Product data — ingredients, nutritional info, packaging attributes — needs constant enrichment and correction across thousands of SKUs before it can go out to retailer catalogs, and manual data stewardship can't keep pace with new product launches.",
+        "why_hard": "Retailer catalog requirements differ, source data comes from multiple systems with real quality gaps, and bad product data causes retailer rejections or compliance issues down the line.",
+        "solution_pattern": "AI-assisted enrichment that fills gaps and flags anomalies automatically, a human review queue for low-confidence fields, feeding one governed master product record instead of per-retailer manual spreadsheets.",
+        "category": "Enterprise AI"
+      },
+      {
+        "id": "cpg_demand_inventory_optimization",
+        "problem": "Inventory swings between stockouts on fast movers and excess on slow movers because demand planning still leans on historical averages instead of near-real-time signals.",
+        "why_hard": "Promotions, seasonality, and retailer-specific ordering patterns distort simple historical averages, and overcorrecting for one miss just creates a different excess-inventory problem.",
+        "solution_pattern": "A predictive inventory model that incorporates retailer point-of-sale signals alongside historical data, exposed through an API that planning systems call directly, retrained on a schedule instead of relying on a static yearly model.",
+        "category": "Enterprise AI"
+      },
+      {
+        "id": "cpg_supply_chain_visibility",
+        "problem": "Supply chain planners can't get a consistent, real-time view of inbound ingredient shipments and outbound retailer deliveries, because that data lives in separate carrier, supplier, and ERP systems.",
+        "why_hard": "Data arrives from many external partner systems with different formats and reliability, so a disruption — an ingredient delay, a cold-chain break — isn't visible until it's already hit production or a delivery window.",
+        "solution_pattern": "An event-driven ingestion layer that normalizes partner and carrier feeds into one shipment-state model, with proactive alerting on at-risk shipments instead of manual status calls.",
+        "category": "Distributed Systems"
+      },
+      {
+        "id": "cpg_trade_promotion_effectiveness",
+        "problem": "Trade promotion spend with retail partners is hard to tie back to actual incremental sales lift, so promotions keep getting funded on gut feel rather than measured return.",
+        "why_hard": "Effectiveness data is scattered across retailer point-of-sale feeds, trade spend systems, and sales data at different granularity and lag, so a clean before/after comparison is genuinely hard to build.",
+        "solution_pattern": "A unified data pipeline joining trade spend, shipment, and retailer sales data, with a lift-measurement layer on top that surfaces results back to trade marketing before the next planning cycle instead of after the fact.",
+        "category": "Cloud Architecture"
+      }
+    ],
     "Retail & E-commerce": [
       {
         "id": "retail_inventory_sync",
@@ -130,19 +210,104 @@
         "category": "Enterprise AI"
       }
     ],
-    "Public Sector & Utilities": [
+    "Insurance": [
+      {
+        "id": "insurance_claims_triage",
+        "problem": "Claims adjusters spend hours manually triaging incoming claims (auto, property, liability) to figure out severity and priority before any real investigation starts.",
+        "why_hard": "Claim descriptions and attached photos vary wildly in quality and detail, and a mis-triaged high-severity claim delays payout for a customer who genuinely needs it fast.",
+        "solution_pattern": "A model that scores incoming claims from text and image evidence combined, routing high-severity or high-fraud-risk claims to senior adjusters automatically instead of a first-in-first-out queue.",
+        "category": "Enterprise AI"
+      },
+      {
+        "id": "insurance_underwriting_data",
+        "problem": "Underwriters price policies using data pulled manually from multiple sources (credit bureaus, property records, prior claims history) that don't share a common schema.",
+        "why_hard": "Each data source has its own refresh cadence and format, and a stale or missing data point can lead to a mispriced policy that only shows up as a loss months later.",
+        "solution_pattern": "An integration layer that normalizes external data feeds into one underwriting data contract, with staleness flags surfaced directly in the underwriting tool instead of silently used as-is.",
+        "category": "Azure Integration"
+      },
+      {
+        "id": "insurance_policy_migration",
+        "problem": "Migrating policies from a legacy policy administration system to a modern platform stalls because policy terms were encoded as free-form text over decades, not structured data.",
+        "why_hard": "Thousands of legacy policies have subtly different clause wording, and an incorrect migration can change what a policyholder is actually entitled to.",
+        "solution_pattern": "AI-assisted extraction of structured terms from legacy policy documents, a validation step comparing extracted terms against the original wording before cutover, migrating in batches instead of all at once.",
+        "category": "Enterprise AI"
+      }
+    ],
+    "Energy & Utilities": [
       {
         "id": "utilities_grid_demand",
         "problem": "Utility providers struggle to predict localized demand spikes (heatwaves, EV charging clusters), leading to either overprovisioning or localized outages.",
         "why_hard": "Demand is hyper-local and time-sensitive, and infrastructure changes (new EV chargers, solar adoption) shift patterns faster than annual planning cycles.",
-        "solution_pattern": "Event Hubs ingestion of smart meter data, Azure AI Foundry short-horizon forecasting model per grid segment, automated alerts via Logic Apps for proactive load balancing.",
+        "solution_pattern": "Event Hubs ingestion of smart meter data, a short-horizon forecasting model per grid segment, automated alerts via Logic Apps for proactive load balancing.",
         "category": "Enterprise AI"
       },
+      {
+        "id": "utilities_outage_prediction",
+        "problem": "Utility crews find out about localized outages mostly from customer calls, well after the outage has already started affecting a neighborhood.",
+        "why_hard": "Grid sensor coverage is uneven, weather-driven failures cluster unpredictably, and dispatching a crew on a false signal wastes an expensive truck roll.",
+        "solution_pattern": "A predictive model combining grid telemetry, weather feeds, and historical outage patterns to flag at-risk segments before failure, with confidence scoring so low-confidence alerts don't trigger a dispatch.",
+        "category": "Enterprise AI"
+      },
+      {
+        "id": "utilities_metering_integration",
+        "problem": "Smart meter data from different vendor hardware generations lands in incompatible formats, so billing and demand-response systems can't get a single clean read on usage.",
+        "why_hard": "Utilities can't swap out meters all at once for cost reasons, so old and new meter formats have to be reconciled indefinitely, not just during a transition window.",
+        "solution_pattern": "An ingestion layer that normalizes meter feeds into one canonical usage event regardless of hardware generation, with format-specific adapters isolated from the downstream billing and demand-response systems.",
+        "category": "Azure Integration"
+      }
+    ],
+    "Telecommunications": [
+      {
+        "id": "telecom_network_incident_correlation",
+        "problem": "Network operations teams get flooded with thousands of low-level alerts during an outage, and finding the one root-cause event buried in the noise takes precious minutes.",
+        "why_hard": "A single physical failure cascades into alerts across many dependent systems, and traditional threshold-based alerting can't tell root cause from symptom under real incident load.",
+        "solution_pattern": "An event correlation pipeline that ingests alerts in real time and groups them by topology and dependency graph, surfacing the likely root cause first instead of a flat alert list.",
+        "category": "Distributed Systems"
+      },
+      {
+        "id": "telecom_churn_prediction",
+        "problem": "Customer churn is detected only after a cancellation request comes in, when it's already too late to make a retention offer that would actually change the outcome.",
+        "why_hard": "Early churn signals (usage drop, support complaints, billing disputes) are scattered across separate systems, and a retention offer sent too broadly just erodes margin without reducing churn.",
+        "solution_pattern": "A churn-risk model scoring customers from usage and support signals combined, feeding a targeted retention workflow instead of blanket discount campaigns.",
+        "category": "Enterprise AI"
+      },
+      {
+        "id": "telecom_5g_edge_data",
+        "problem": "Latency-sensitive applications (video analytics, IoT control loops) built on 5G edge infrastructure keep getting deployed like regular cloud workloads, and end up missing their latency targets in production.",
+        "why_hard": "Edge nodes have limited compute and inconsistent connectivity back to the core, and design decisions that work fine in a centralized cloud don't translate directly to distributed edge sites.",
+        "solution_pattern": "An edge-first architecture that keeps latency-critical processing local to the edge node, with async sync back to the core for aggregation instead of round-tripping every request centrally.",
+        "category": "Distributed Systems"
+      }
+    ],
+    "Public Sector & Government": [
       {
         "id": "publicsector_citizen_services",
         "problem": "Citizens face long wait times and repeated document submission across different government service portals for related applications (permits, benefits, licenses).",
         "why_hard": "Systems are siloed across departments with different legacy tech stacks, strict data-sharing/privacy rules, and low tolerance for downtime or errors.",
         "solution_pattern": "API Management as a unified citizen-facing gateway, Logic Apps orchestrating cross-department workflows, secure data-sharing agreements enforced at the integration layer.",
+        "category": "Azure Integration"
+      },
+      {
+        "id": "publicsector_grant_compliance",
+        "problem": "Government agencies distributing grant funding can't verify recipient compliance reports until well after funds are disbursed, because reports arrive as unstructured PDFs from hundreds of grantees.",
+        "why_hard": "Report formats vary by grantee, compliance rules differ by grant program, and a missed non-compliance case can mean funds were misused without anyone catching it in time.",
+        "solution_pattern": "AI-assisted extraction of compliance data from grantee reports against program-specific rule checklists, flagging exceptions for human review instead of a purely manual sampling audit.",
+        "category": "Enterprise AI"
+      }
+    ],
+    "Travel & Hospitality": [
+      {
+        "id": "hospitality_dynamic_pricing",
+        "problem": "Hotels and short-term rental operators leave revenue on the table because room pricing updates lag actual demand shifts (local events, weather, competitor pricing) by days instead of hours.",
+        "why_hard": "Demand signals come from many external sources with different update frequencies, and overly aggressive repricing damages guest trust and booking-channel relationships.",
+        "solution_pattern": "A pricing model that ingests demand signals continuously and recommends price adjustments within guardrails, with human approval for larger swings instead of full autonomy.",
+        "category": "Enterprise AI"
+      },
+      {
+        "id": "hospitality_guest_service_routing",
+        "problem": "Guest service requests (maintenance, housekeeping, concierge) submitted through app or front desk get routed manually, so simple requests wait behind complex ones and guest satisfaction scores slip.",
+        "why_hard": "Request volume spikes unpredictably around check-in and check-out times, and misrouting a request to the wrong team just adds delay instead of fixing anything.",
+        "solution_pattern": "An event-driven routing pipeline that classifies incoming requests and assigns them directly to the right team by urgency and type, instead of a single shared inbox triaged by hand.",
         "category": "Azure Integration"
       }
     ]

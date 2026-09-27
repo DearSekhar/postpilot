@@ -1,7 +1,6 @@
 import base64
 import json
 import os
-import random
 from typing import Optional, TypedDict
 
 from langgraph.graph import StateGraph, END
@@ -41,6 +40,13 @@ contrast, or a pointed question. It must make sense standing alone, without the 
 - The "topic" field must not start with "Real-time" or "AI-driven", and must not end with "with Azure".
 - Don't force Azure/AI product names into every post — name specific services only when they're \
 genuinely the point of the post.
+- Write in plain, concrete language. Most sentences should be under 20 words. Never stack multiple \
+abstract nouns back to back (e.g. "cost transparency", "operational simplicity", "audit trails") \
+to sound sophisticated — say the concrete thing that noun stands for instead.
+- Never use the phrase "the trade-off is X vs Y" or close variants of it — describe trade-offs in \
+specific, plain terms tied to this post's actual scenario.
+- Use only plain ASCII punctuation: straight quotes (" and '), a regular hyphen (-), and a plain \
+em dash (—) or comma for pauses. Never use curly/smart quotes or a non-breaking hyphen character.
 {discussion_question_rule}
 {business_problem_section}
 {news_context_section}
@@ -192,25 +198,18 @@ def _save_new_problem(industry: str, category: str, problem: dict) -> str:
 POST_FORMAT_FALLBACK = "common_mistake"
 
 
-def _suggest_post_format(formats: dict, recent_posts: list) -> Optional[str]:
-    """Rotates through post_formats by least-recently-used, the same way
-    diagram style is balanced — so the post's whole shape varies day to
-    day instead of always defaulting to the industry-problem template."""
-    if not formats:
-        return None
-    window = recent_posts[-len(formats):]
-    recent_formats = [p.get("post_format") for p in window]
-    unused = [f for f in formats if f not in recent_formats]
-    return random.choice(unused) if unused else random.choice(list(formats))
-
-
 def generate_draft(state: AgentState) -> AgentState:
     prefs = state["preferences"]
     recent_posts = topic_history.load_recent_posts()
     mix_targets = prefs.get("content_mix", {})
 
     post_formats = prefs.get("post_formats", {})
-    post_format = _suggest_post_format(post_formats, recent_posts)
+    post_format_mix = prefs.get("post_format_mix", {})
+    post_format = (
+        content_mix.suggest_weighted(post_format_mix, recent_posts, field="post_format")
+        if post_format_mix
+        else None
+    )
     use_industry_problem = (not post_formats) or (post_format == "industry_problem")
 
     category_hint = ""

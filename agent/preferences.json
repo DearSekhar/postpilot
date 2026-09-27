@@ -2,8 +2,8 @@
   "min_words": 150,
   "max_words": 300,
   "tone": "Confident and opinionated, like a senior architect talking to peers over coffee. Short sentences. Take a clear position. Plain language over jargon.",
-  "target_audience": ["Software Engineers", "Solution Architects", "Cloud Architects", "AI Engineers", "Engineering Managers"],
-  "primary_domains": ["Azure AI", "Enterprise AI", "Azure Integration Services", "Azure API Management", "Azure Functions", "Azure Service Bus", "Azure Event Grid", "Logic Apps", "Cloud Architecture", "Enterprise Architecture", "Distributed Systems", "Application Modernization", "Python", ".NET"],
+  "target_audience": ["Software Engineers", "Solution Architects", "Cloud Architects", "AI Engineers", "Engineering Managers", "Fintech & Mortgage Technology Leaders", "Supply Chain Technology Leaders"],
+  "primary_domains": ["Azure Integration Services (Service Bus, API Management, Logic Apps, Event Grid)", "Enterprise Architecture & Legacy Modernization", "Mortgage & Lending Technology", "Supply Chain & B2B/EDI Integration", "Enterprise AI", "Cloud Architecture", "Distributed Systems", "Azure DevOps & CI/CD", "Python", ".NET/C#"],
   "preferred_ai_topics": ["Agentic AI", "Azure AI Foundry", "MCP", "A2A", "RAG", "Semantic Kernel", "Azure AI Search", "LLMOps", "AI Observability", "Prompt Flow", "Vector Search", "Knowledge Graphs"],
   "preferred_post_types": ["Architecture comparison", "Design pattern", "Production best practice", "Common implementation mistake", "Performance optimization", "Cost optimization", "Security consideration", "Scalability lesson", "Architecture decision"],
   "avoid_phrases": ["Excited to share", "Game changer", "Revolutionary", "AI is transforming everything", "The future is AI"],
@@ -28,8 +28,19 @@
     "news_reaction": "React to one headline from the provided news context: what it actually changes for architects.",
     "industry_problem": "Real business problem in a specific industry, then why it's hard, then the solution pattern."
   },
+  "post_format_mix": {
+    "industry_problem": 45,
+    "contrarian_take": 10,
+    "common_mistake": 10,
+    "x_vs_y": 8,
+    "numbered_lessons": 7,
+    "myth_vs_reality": 7,
+    "cost_or_perf_numbers": 8,
+    "news_reaction": 5
+  },
   "notes": [
-    "Vary the angle. Some posts are opinions, some are comparisons, some are lessons. A business scenario is one option, not a requirement.",
+    "This author has real hands-on experience in enterprise Azure integration, mortgage/lending technology, and CPG/food manufacturing supply chains, but posts should cover the full range of industries provided (healthcare, insurance, energy, telecom, retail, manufacturing, public sector, hospitality, and more) — real-world businesses across every sector face problems AI/Azure/solution architecture can solve, not just the author's own background. Always write with authentic domain detail, not generic buzzwords, and never name a real employer or company.",
+    "When inventing a new business problem (is_new: true) rather than reusing the seed example, don't just lightly reword it — think of a genuinely different, realistic scenario for that industry and a clever, optimal AI/Azure solution pattern: the kind of idea a real practitioner in that field would find genuinely useful, not a generic restatement.",
     "The closing discussion question should be sharper and more specific to the scenario just discussed, not a generic prompt like 'What are some key considerations when designing X?'. It should invite a real opinion or experience, e.g. asking readers to weigh in on a tradeoff, share how they solved a similar problem, or challenge an assumption made in the post."
   ]
 }
