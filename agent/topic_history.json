@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Localized demand forecasting for utilities",
-    "category": "Enterprise AI",
-    "date": "2026-09-08",
-    "industry": "Public Sector & Utilities",
-    "problem_id": "utilities_grid_demand",
-    "diagram_style": "architecture"
-  },
-  {
     "topic": "Unified Customer 360 with Azure Integration Services",
     "category": "Azure Integration",
     "date": "2026-09-09",
@@ -154,5 +146,14 @@
     "date": "2026-09-26",
     "diagram_style": "concept",
     "post_format": "news_reaction"
+  },
+  {
+    "topic": "Event-driven inventory sync",
+    "category": "Azure Integration",
+    "date": "2026-09-27",
+    "industry": "Retail & E-commerce",
+    "problem_id": "retail_inventory_sync",
+    "diagram_style": "architecture",
+    "post_format": "industry_problem"
   }
 ]
