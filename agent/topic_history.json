@@ -1,13 +1,5 @@
 [
   {
-    "topic": "AI-powered loan underwriting",
-    "category": "Enterprise AI",
-    "date": "2026-09-10",
-    "industry": "Financial Services",
-    "problem_id": "finance_document_processing",
-    "diagram_style": "concept"
-  },
-  {
     "topic": "Radiology Imaging Integration",
     "category": "Azure Integration",
     "date": "2026-09-11",
@@ -155,6 +147,15 @@
     "industry": "Mortgage & Lending",
     "problem_id": "mortgage_document_intake",
     "diagram_style": "hierarchy",
+    "post_format": "industry_problem"
+  },
+  {
+    "topic": "AI inventory forecasting",
+    "category": "Enterprise AI",
+    "date": "2026-09-29",
+    "industry": "Consumer Packaged Goods & Food Manufacturing",
+    "problem_id": "cpg_demand_inventory_optimization",
+    "diagram_style": "architecture",
     "post_format": "industry_problem"
   }
 ]
