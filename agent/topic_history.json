@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Radiology Imaging Integration",
-    "category": "Azure Integration",
-    "date": "2026-09-11",
-    "industry": "Healthcare",
-    "problem_id": "hospitals_must_share_radiology_studies",
-    "diagram_style": "architecture"
-  },
-  {
     "topic": "Real-time temperature compliance in perishable logistics",
     "category": "Distributed Systems",
     "date": "2026-09-12",
@@ -156,6 +148,15 @@
     "industry": "Consumer Packaged Goods & Food Manufacturing",
     "problem_id": "cpg_demand_inventory_optimization",
     "diagram_style": "architecture",
+    "post_format": "industry_problem"
+  },
+  {
+    "topic": "Predictive Maintenance Pipeline",
+    "category": "Enterprise AI",
+    "date": "2026-09-30",
+    "industry": "Manufacturing",
+    "problem_id": "unplanned_equipment_failures_cause_costly",
+    "diagram_style": "hierarchy",
     "post_format": "industry_problem"
   }
 ]
