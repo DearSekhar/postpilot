@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Real-time temperature compliance in perishable logistics",
-    "category": "Distributed Systems",
-    "date": "2026-09-12",
-    "industry": "Supply Chain & Logistics",
-    "problem_id": "carriers_moving_temperature_sensitive_cargo",
-    "diagram_style": "hierarchy"
-  },
-  {
     "topic": "Real-time visual defect detection at scale",
     "category": "Enterprise AI",
     "date": "2026-09-13",
@@ -158,5 +150,12 @@
     "problem_id": "unplanned_equipment_failures_cause_costly",
     "diagram_style": "hierarchy",
     "post_format": "industry_problem"
+  },
+  {
+    "topic": "Service Bus dead-letter misconfiguration",
+    "category": "Azure Integration",
+    "date": "2026-10-01",
+    "diagram_style": "concept",
+    "post_format": "common_mistake"
   }
 ]
