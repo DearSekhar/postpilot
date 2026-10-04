@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Real\u2011time fraud scoring with Azure AI Foundry",
-    "category": "Enterprise AI",
-    "date": "2026-09-15",
-    "industry": "Financial Services",
-    "problem_id": "finance_fraud_latency",
-    "diagram_style": "hierarchy"
-  },
-  {
     "topic": "Personalized No-show Reduction",
     "category": "Enterprise AI",
     "date": "2026-09-16",
@@ -155,5 +147,12 @@
     "date": "2026-10-03",
     "diagram_style": "hierarchy",
     "post_format": "myth_vs_reality"
+  },
+  {
+    "topic": "Logic Apps latency cost",
+    "category": "Performance & Observability",
+    "date": "2026-10-04",
+    "diagram_style": "concept",
+    "post_format": "cost_or_perf_numbers"
   }
 ]
