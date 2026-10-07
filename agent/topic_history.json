@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Edge AI for Visual Inspection",
-    "category": "Enterprise AI",
-    "date": "2026-09-18",
-    "industry": "Manufacturing",
-    "problem_id": "manufacturing_quality_inspection",
-    "diagram_style": "hierarchy"
-  },
-  {
     "topic": "Unified Permit Processing",
     "category": "Azure Integration",
     "date": "2026-09-19",
@@ -152,5 +144,14 @@
     "date": "2026-10-06",
     "diagram_style": "hierarchy",
     "post_format": "numbered_lessons"
+  },
+  {
+    "topic": "Hybrid burst for loan origination",
+    "category": "Cloud Architecture",
+    "date": "2026-10-07",
+    "industry": "Financial Services",
+    "problem_id": "mortgage_lenders_face_application_surges",
+    "diagram_style": "concept",
+    "post_format": "industry_problem"
   }
 ]
