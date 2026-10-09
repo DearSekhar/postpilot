@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Real-time personalized recommendations at checkout",
-    "category": "Enterprise AI",
-    "date": "2026-09-20",
-    "industry": "Retail & E-commerce",
-    "problem_id": "retail_personalization_latency",
-    "diagram_style": "hierarchy"
-  },
-  {
     "topic": "Strangler\u2011Fig API Modernization for Legacy Core Banking",
     "category": "Azure Integration",
     "date": "2026-09-21",
@@ -153,6 +145,15 @@
     "industry": "Healthcare",
     "problem_id": "healthcare_appointment_noshow",
     "diagram_style": "architecture",
+    "post_format": "industry_problem"
+  },
+  {
+    "topic": "Partner Onboarding Pipeline",
+    "category": "Distributed Systems",
+    "date": "2026-10-09",
+    "industry": "Mortgage & Lending",
+    "problem_id": "mortgage_correspondent_onboarding",
+    "diagram_style": "hierarchy",
     "post_format": "industry_problem"
   }
 ]
