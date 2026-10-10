@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Strangler\u2011Fig API Modernization for Legacy Core Banking",
-    "category": "Azure Integration",
-    "date": "2026-09-21",
-    "industry": "Financial Services",
-    "problem_id": "finance_legacy_core_integration",
-    "diagram_style": "concept"
-  },
-  {
     "topic": "AI\u2011driven claims triage",
     "category": "Enterprise AI",
     "date": "2026-09-22",
@@ -154,6 +146,15 @@
     "industry": "Mortgage & Lending",
     "problem_id": "mortgage_correspondent_onboarding",
     "diagram_style": "hierarchy",
+    "post_format": "industry_problem"
+  },
+  {
+    "topic": "Semantic enrichment of CPG product catalogs",
+    "category": "Enterprise AI",
+    "date": "2026-10-10",
+    "industry": "Consumer Packaged Goods & Food Manufacturing",
+    "problem_id": "cpg_product_data_enrichment",
+    "diagram_style": "architecture",
     "post_format": "industry_problem"
   }
 ]
