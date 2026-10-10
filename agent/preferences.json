@@ -19,14 +19,14 @@
       "Career & Leadership": 5
   },
   "post_formats": {
-    "contrarian_take": "Open with a claim many architects would disagree with. Defend it with one concrete reason and admit one trade-off.",
-    "common_mistake": "Name ONE specific mistake teams make, show exactly what breaks in production, then the fix.",
-    "x_vs_y": "Head-to-head comparison of two options (e.g. Service Bus vs Event Grid, RAG vs fine-tuning). End with a one-line decision rule.",
-    "numbered_lessons": "3-5 numbered, punchy lessons on one topic. Each is one bold line plus one sentence of why.",
-    "myth_vs_reality": "Pick a popular belief about cloud/AI and take it apart with specifics.",
+    "contrarian_take": "Open with a claim many architects would disagree with — about an AI/architecture STRATEGY decision (build vs. buy, agentic vs. deterministic, centralize vs. push to the edge, automate vs. keep a human in the loop), not one service's configuration. Defend it with one concrete reason and admit one trade-off.",
+    "common_mistake": "Name ONE specific mistake teams make. Rotate the domain across posts — AI/agent design, data modeling, security, cost, team process — don't default to the same messaging service every time. Show exactly what breaks in production, then the fix.",
+    "x_vs_y": "Head-to-head comparison of two genuinely different options — an architecture style, an AI technique, a build-vs-buy call, or two approaches from DIFFERENT domains. Pick a new pairing each time; never reuse the same two things being compared, or even the same primary technology, as a recent post. End with a one-line decision rule.",
+    "numbered_lessons": "3-5 numbered, punchy lessons on one topic. Rotate the subject domain across posts (AI system design, integration, cost, security, process) instead of circling back to the same service. Each is one bold line plus one sentence of why.",
+    "myth_vs_reality": "Pick a popular belief about cloud/AI and take it apart with specifics — favor beliefs about AI strategy or architectural philosophy over a narrow single-service claim.",
     "cost_or_perf_numbers": "Lead with a concrete (illustrative, clearly hypothetical) number. Show where the cost/latency actually comes from and how to cut it.",
     "news_reaction": "React to one headline from the provided news context: what it actually changes for architects.",
-    "industry_problem": "Real business problem in a specific industry, then why it's hard, then the solution pattern."
+    "industry_problem": "Real business problem in a specific industry — and ideally a specific kind of company or situation within it, not the industry in general — then why it's hard, then a simple, elegant AI/Azure solution. The elegance is the point: not the most service-heavy pipeline possible."
   },
   "post_format_mix": {
     "industry_problem": 45,
@@ -41,6 +41,8 @@
   "notes": [
     "This author has real hands-on experience in enterprise Azure integration, mortgage/lending technology, and CPG/food manufacturing supply chains, but posts should cover the full range of industries provided (healthcare, insurance, energy, telecom, retail, manufacturing, public sector, hospitality, and more) — real-world businesses across every sector face problems AI/Azure/solution architecture can solve, not just the author's own background. Always write with authentic domain detail, not generic buzzwords, and never name a real employer or company.",
     "When inventing a new business problem (is_new: true) rather than reusing the seed example, don't just lightly reword it — think of a genuinely different, realistic scenario for that industry and a clever, optimal AI/Azure solution pattern: the kind of idea a real practitioner in that field would find genuinely useful, not a generic restatement.",
+    "Ground problems in a specific kind of company or situation within the chosen industry, not the industry in general — e.g. within Retail: a grocery chain vs. a fashion e-commerce brand vs. a big-box retailer face different problems; within Healthcare: a hospital system vs. a health insurer vs. a telehealth startup. Vary this across posts instead of writing the same generic industry-wide problem every time.",
+    "The best solution is simple and elegant, not the most service-heavy pipeline possible. Don't default to the same ingest-route-transform-act messaging pipeline (Service Bus/Event Grid/Logic Apps/Functions) as the answer to everything — vary the TYPE of solution across posts too: sometimes it's a clever AI/agentic technique, sometimes a surprisingly simple architectural choice, sometimes just removing a step rather than adding one.",
     "The closing discussion question should be sharper and more specific to the scenario just discussed, not a generic prompt like 'What are some key considerations when designing X?'. It should invite a real opinion or experience, e.g. asking readers to weigh in on a tradeoff, share how they solved a similar problem, or challenge an assumption made in the post."
   ]
 }

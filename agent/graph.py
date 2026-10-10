@@ -56,7 +56,9 @@ Category: choose exactly one of these labels, matching this post's primary theme
 {category_hint}
 
 Recently published posts — avoid repeating the same topic, category, or industry. If recent \
-posts are heavily weighted toward one category or industry, prefer a different one this time:
+posts are heavily weighted toward one category or industry, prefer a different one this time. \
+Also do not make the same primary technology or service (e.g. "Service Bus", "RAG", "Event Grid") \
+the main subject of today's post if it was already the main subject of one of these:
 {recent_posts}
 
 Additional notes from past feedback (follow these closely, they reflect real corrections):

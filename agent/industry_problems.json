@@ -1,17 +1,17 @@
 {
   "industry_mix": {
-    "Mortgage & Lending": 15,
-    "Consumer Packaged Goods & Food Manufacturing": 12,
-    "Financial Services": 10,
-    "Healthcare": 10,
-    "Retail & E-commerce": 10,
+    "Mortgage & Lending": 12,
+    "Consumer Packaged Goods & Food Manufacturing": 10,
+    "Banking & Payments": 9,
+    "Healthcare": 9,
+    "Retail & E-commerce": 9,
     "Supply Chain & Logistics": 8,
     "Manufacturing": 8,
     "Insurance": 8,
-    "Energy & Utilities": 7,
-    "Telecommunications": 6,
-    "Public Sector & Government": 4,
-    "Travel & Hospitality": 2
+    "Energy & Utilities": 8,
+    "Telecommunications": 7,
+    "Public Sector & Government": 6,
+    "Travel & Hospitality": 6
   },
   "problems": {
     "Mortgage & Lending": [
@@ -118,7 +118,7 @@
         "category": "Azure Integration"
       }
     ],
-    "Financial Services": [
+    "Banking & Payments": [
       {
         "id": "finance_fraud_latency",
         "problem": "Fraud detection models flag suspicious transactions minutes after the transaction clears instead of before authorization, so fraudulent payments still go through.",
@@ -134,10 +134,10 @@
         "category": "Azure Integration"
       },
       {
-        "id": "finance_document_processing",
-        "problem": "Loan and mortgage underwriting is delayed by manual review of unstructured documents (pay stubs, tax forms, bank statements) submitted in inconsistent formats.",
-        "why_hard": "Documents vary wildly in format and quality (scans, photos, PDFs), and errors have real financial/compliance consequences.",
-        "solution_pattern": "Azure AI Document Intelligence for extraction, RAG-based validation against policy rules, human-in-the-loop review step for edge cases via Logic Apps workflow.",
+        "id": "banking_kyc_document_review",
+        "problem": "Opening a new business bank account is delayed by manual review of KYC/AML documents (incorporation papers, beneficial ownership forms, ID verification) submitted in inconsistent formats.",
+        "why_hard": "Documents vary wildly in format and quality (scans, photos, PDFs) and come from applicants in different jurisdictions, and a missed red flag has real regulatory and financial-crime consequences.",
+        "solution_pattern": "Azure AI Document Intelligence for extraction, a rules engine cross-checking extracted data against watchlists and policy thresholds, human-in-the-loop review for edge cases via a Logic Apps workflow.",
         "category": "Enterprise AI"
       },
       {
