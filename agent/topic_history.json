@@ -1,13 +1,5 @@
 [
   {
-    "topic": "AI\u2011driven claims triage",
-    "category": "Enterprise AI",
-    "date": "2026-09-22",
-    "industry": "Healthcare",
-    "problem_id": "healthcare_claims_backlog",
-    "diagram_style": "architecture"
-  },
-  {
     "topic": "Real\u2011time shipment visibility pipeline",
     "category": "Distributed Systems",
     "date": "2026-09-23",
@@ -155,6 +147,15 @@
     "industry": "Consumer Packaged Goods & Food Manufacturing",
     "problem_id": "cpg_product_data_enrichment",
     "diagram_style": "architecture",
+    "post_format": "industry_problem"
+  },
+  {
+    "topic": "AI-augmented KYC workflow",
+    "category": "Enterprise AI",
+    "date": "2026-10-11",
+    "industry": "Banking & Payments",
+    "problem_id": "banking_kyc_document_review",
+    "diagram_style": "hierarchy",
     "post_format": "industry_problem"
   }
 ]
