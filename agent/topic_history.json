@@ -1,13 +1,5 @@
 [
   {
-    "topic": "Real\u2011time shipment visibility pipeline",
-    "category": "Distributed Systems",
-    "date": "2026-09-23",
-    "industry": "Supply Chain & Logistics",
-    "problem_id": "supplychain_visibility",
-    "diagram_style": "hierarchy"
-  },
-  {
     "topic": "Vector Search Cost Reduction",
     "category": "Performance & Observability",
     "date": "2026-09-24",
@@ -157,5 +149,12 @@
     "problem_id": "banking_kyc_document_review",
     "diagram_style": "hierarchy",
     "post_format": "industry_problem"
+  },
+  {
+    "topic": "Prompt versioning mistake",
+    "category": "Enterprise AI",
+    "date": "2026-10-12",
+    "diagram_style": "concept",
+    "post_format": "common_mistake"
   }
 ]
