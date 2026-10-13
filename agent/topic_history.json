@@ -1,12 +1,5 @@
 [
   {
-    "topic": "Vector Search Cost Reduction",
-    "category": "Performance & Observability",
-    "date": "2026-09-24",
-    "diagram_style": "concept",
-    "post_format": "cost_or_perf_numbers"
-  },
-  {
     "topic": "Azure Functions vs App Service for API backends",
     "category": "Cloud Architecture",
     "date": "2026-09-25",
@@ -156,5 +149,12 @@
     "date": "2026-10-12",
     "diagram_style": "concept",
     "post_format": "common_mistake"
+  },
+  {
+    "topic": "Logic Apps vs Functions for B2B EDI",
+    "category": "Azure Integration",
+    "date": "2026-10-13",
+    "diagram_style": "architecture",
+    "post_format": "x_vs_y"
   }
 ]
