@@ -1,12 +1,5 @@
 [
   {
-    "topic": "Container Apps Sandboxes Impact",
-    "category": "Cloud Architecture",
-    "date": "2026-09-26",
-    "diagram_style": "concept",
-    "post_format": "news_reaction"
-  },
-  {
     "topic": "Event-driven inventory sync",
     "category": "Azure Integration",
     "date": "2026-09-27",
@@ -156,5 +149,12 @@
     "date": "2026-10-15",
     "diagram_style": "concept",
     "post_format": "cost_or_perf_numbers"
+  },
+  {
+    "topic": "Agentic Orchestration",
+    "category": "Enterprise AI",
+    "date": "2026-10-16",
+    "diagram_style": "architecture",
+    "post_format": "contrarian_take"
   }
 ]
