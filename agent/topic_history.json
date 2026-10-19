@@ -1,14 +1,5 @@
 [
   {
-    "topic": "AI inventory forecasting",
-    "category": "Enterprise AI",
-    "date": "2026-09-29",
-    "industry": "Consumer Packaged Goods & Food Manufacturing",
-    "problem_id": "cpg_demand_inventory_optimization",
-    "diagram_style": "architecture",
-    "post_format": "industry_problem"
-  },
-  {
     "topic": "Predictive Maintenance Pipeline",
     "category": "Enterprise AI",
     "date": "2026-09-30",
@@ -153,6 +144,15 @@
     "industry": "Retail & E-commerce",
     "problem_id": "retail_personalization_latency",
     "diagram_style": "concept",
+    "post_format": "industry_problem"
+  },
+  {
+    "topic": "FHIR normalization pipeline",
+    "category": "Azure Integration",
+    "date": "2026-10-19",
+    "industry": "Healthcare",
+    "problem_id": "healthcare_interop",
+    "diagram_style": "architecture",
     "post_format": "industry_problem"
   }
 ]
