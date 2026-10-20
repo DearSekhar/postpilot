@@ -1,14 +1,5 @@
 [
   {
-    "topic": "Predictive Maintenance Pipeline",
-    "category": "Enterprise AI",
-    "date": "2026-09-30",
-    "industry": "Manufacturing",
-    "problem_id": "unplanned_equipment_failures_cause_costly",
-    "diagram_style": "hierarchy",
-    "post_format": "industry_problem"
-  },
-  {
     "topic": "Service Bus dead-letter misconfiguration",
     "category": "Azure Integration",
     "date": "2026-10-01",
@@ -153,6 +144,15 @@
     "industry": "Healthcare",
     "problem_id": "healthcare_interop",
     "diagram_style": "architecture",
+    "post_format": "industry_problem"
+  },
+  {
+    "topic": "RAG loan product matching",
+    "category": "Enterprise AI",
+    "date": "2026-10-20",
+    "industry": "Mortgage & Lending",
+    "problem_id": "lenders_must_match_each_borrower",
+    "diagram_style": "hierarchy",
     "post_format": "industry_problem"
   }
 ]
