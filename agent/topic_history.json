@@ -1,12 +1,5 @@
 [
   {
-    "topic": "Service Bus dead-letter misconfiguration",
-    "category": "Azure Integration",
-    "date": "2026-10-01",
-    "diagram_style": "concept",
-    "post_format": "common_mistake"
-  },
-  {
     "topic": "Service Bus vs Event Grid",
     "category": "Azure Integration",
     "date": "2026-10-02",
@@ -153,6 +146,15 @@
     "industry": "Mortgage & Lending",
     "problem_id": "lenders_must_match_each_borrower",
     "diagram_style": "hierarchy",
+    "post_format": "industry_problem"
+  },
+  {
+    "topic": "Unified Shipment Dashboard",
+    "category": "Distributed Systems",
+    "date": "2026-10-21",
+    "industry": "Consumer Packaged Goods & Food Manufacturing",
+    "problem_id": "cpg_supply_chain_visibility",
+    "diagram_style": "architecture",
     "post_format": "industry_problem"
   }
 ]
