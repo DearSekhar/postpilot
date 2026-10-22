@@ -1,12 +1,5 @@
 [
   {
-    "topic": "Service Bus vs Event Grid",
-    "category": "Azure Integration",
-    "date": "2026-10-02",
-    "diagram_style": "architecture",
-    "post_format": "x_vs_y"
-  },
-  {
     "topic": "RAG does not always need a vector database",
     "category": "Enterprise AI",
     "date": "2026-10-03",
@@ -155,6 +148,15 @@
     "industry": "Consumer Packaged Goods & Food Manufacturing",
     "problem_id": "cpg_supply_chain_visibility",
     "diagram_style": "architecture",
+    "post_format": "industry_problem"
+  },
+  {
+    "topic": "Regulatory reporting pipeline",
+    "category": "Cloud Architecture",
+    "date": "2026-10-22",
+    "industry": "Banking & Payments",
+    "problem_id": "finance_regulatory_reporting",
+    "diagram_style": "hierarchy",
     "post_format": "industry_problem"
   }
 ]
