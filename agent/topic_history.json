@@ -1,12 +1,5 @@
 [
   {
-    "topic": "Logic Apps latency cost",
-    "category": "Performance & Observability",
-    "date": "2026-10-04",
-    "diagram_style": "concept",
-    "post_format": "cost_or_perf_numbers"
-  },
-  {
     "topic": "Service Bus vs Event Hub for telemetry",
     "category": "Distributed Systems",
     "date": "2026-10-05",
@@ -158,5 +151,12 @@
     "date": "2026-10-23",
     "diagram_style": "concept",
     "post_format": "common_mistake"
+  },
+  {
+    "topic": "Search_vs_SemanticKernel \u2014 Azure AI Search vs Semantic Kernel",
+    "category": "Enterprise AI",
+    "date": "2026-10-24",
+    "diagram_style": "architecture",
+    "post_format": "x_vs_y"
   }
 ]
