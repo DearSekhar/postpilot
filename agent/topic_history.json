@@ -1,14 +1,5 @@
 [
   {
-    "topic": "Hybrid burst for loan origination",
-    "category": "Cloud Architecture",
-    "date": "2026-10-07",
-    "industry": "Financial Services",
-    "problem_id": "mortgage_lenders_face_application_surges",
-    "diagram_style": "concept",
-    "post_format": "industry_problem"
-  },
-  {
     "topic": "Predictive No-Show Management",
     "category": "Enterprise AI",
     "date": "2026-10-08",
@@ -158,5 +149,12 @@
     "date": "2026-10-26",
     "diagram_style": "concept",
     "post_format": "cost_or_perf_numbers"
+  },
+  {
+    "topic": "Edge inference over central LLMs",
+    "category": "Cloud Architecture",
+    "date": "2026-10-27",
+    "diagram_style": "architecture",
+    "post_format": "contrarian_take"
   }
 ]
