@@ -1,14 +1,5 @@
 [
   {
-    "topic": "Predictive No-Show Management",
-    "category": "Enterprise AI",
-    "date": "2026-10-08",
-    "industry": "Healthcare",
-    "problem_id": "healthcare_appointment_noshow",
-    "diagram_style": "architecture",
-    "post_format": "industry_problem"
-  },
-  {
     "topic": "Partner Onboarding Pipeline",
     "category": "Distributed Systems",
     "date": "2026-10-09",
@@ -156,5 +147,12 @@
     "date": "2026-10-27",
     "diagram_style": "architecture",
     "post_format": "contrarian_take"
+  },
+  {
+    "topic": "LLM Observability for Mortgage underwriting",
+    "category": "Performance & Observability",
+    "date": "2026-10-28",
+    "diagram_style": "hierarchy",
+    "post_format": "numbered_lessons"
   }
 ]
