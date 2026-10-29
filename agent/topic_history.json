@@ -1,14 +1,5 @@
 [
   {
-    "topic": "Partner Onboarding Pipeline",
-    "category": "Distributed Systems",
-    "date": "2026-10-09",
-    "industry": "Mortgage & Lending",
-    "problem_id": "mortgage_correspondent_onboarding",
-    "diagram_style": "hierarchy",
-    "post_format": "industry_problem"
-  },
-  {
     "topic": "Semantic enrichment of CPG product catalogs",
     "category": "Enterprise AI",
     "date": "2026-10-10",
@@ -154,5 +145,14 @@
     "date": "2026-10-28",
     "diagram_style": "hierarchy",
     "post_format": "numbered_lessons"
+  },
+  {
+    "topic": "Dynamic product copy generation",
+    "category": "Enterprise AI",
+    "date": "2026-10-29",
+    "industry": "Retail & E-commerce",
+    "problem_id": "fast_fashion_e_commerce_sites",
+    "diagram_style": "concept",
+    "post_format": "industry_problem"
   }
 ]
