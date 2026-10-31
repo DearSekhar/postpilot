@@ -1,14 +1,5 @@
 [
   {
-    "topic": "AI-augmented KYC workflow",
-    "category": "Enterprise AI",
-    "date": "2026-10-11",
-    "industry": "Banking & Payments",
-    "problem_id": "banking_kyc_document_review",
-    "diagram_style": "hierarchy",
-    "post_format": "industry_problem"
-  },
-  {
     "topic": "Prompt versioning mistake",
     "category": "Enterprise AI",
     "date": "2026-10-12",
@@ -153,6 +144,15 @@
     "industry": "Healthcare",
     "problem_id": "healthcare_appointment_noshow",
     "diagram_style": "architecture",
+    "post_format": "industry_problem"
+  },
+  {
+    "topic": "Strangler Integration for Mortgage Servicing",
+    "category": "Azure Integration",
+    "date": "2026-10-31",
+    "industry": "Mortgage & Lending",
+    "problem_id": "mortgage_legacy_middleware_retirement",
+    "diagram_style": "hierarchy",
     "post_format": "industry_problem"
   }
 ]
