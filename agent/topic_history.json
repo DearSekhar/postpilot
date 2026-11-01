@@ -1,12 +1,5 @@
 [
   {
-    "topic": "Prompt versioning mistake",
-    "category": "Enterprise AI",
-    "date": "2026-10-12",
-    "diagram_style": "concept",
-    "post_format": "common_mistake"
-  },
-  {
     "topic": "Logic Apps vs Functions for B2B EDI",
     "category": "Azure Integration",
     "date": "2026-10-13",
@@ -153,6 +146,15 @@
     "industry": "Mortgage & Lending",
     "problem_id": "mortgage_legacy_middleware_retirement",
     "diagram_style": "hierarchy",
+    "post_format": "industry_problem"
+  },
+  {
+    "topic": "AI-powered product data enrichment",
+    "category": "Enterprise AI",
+    "date": "2026-11-01",
+    "industry": "Consumer Packaged Goods & Food Manufacturing",
+    "problem_id": "cpg_product_data_enrichment",
+    "diagram_style": "architecture",
     "post_format": "industry_problem"
   }
 ]
