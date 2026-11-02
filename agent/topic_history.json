@@ -1,12 +1,5 @@
 [
   {
-    "topic": "Logic Apps vs Functions for B2B EDI",
-    "category": "Azure Integration",
-    "date": "2026-10-13",
-    "diagram_style": "architecture",
-    "post_format": "x_vs_y"
-  },
-  {
     "topic": "AI Strategy Myth: One Model Fits All",
     "category": "Enterprise AI",
     "date": "2026-10-14",
@@ -155,6 +148,15 @@
     "industry": "Consumer Packaged Goods & Food Manufacturing",
     "problem_id": "cpg_product_data_enrichment",
     "diagram_style": "architecture",
+    "post_format": "industry_problem"
+  },
+  {
+    "topic": "Legacy Core API Layer",
+    "category": "Azure Integration",
+    "date": "2026-11-02",
+    "industry": "Banking & Payments",
+    "problem_id": "finance_legacy_core_integration",
+    "diagram_style": "hierarchy",
     "post_format": "industry_problem"
   }
 ]
