@@ -1,12 +1,5 @@
 [
   {
-    "topic": "Functions cold start cost",
-    "category": "Performance & Observability",
-    "date": "2026-10-15",
-    "diagram_style": "concept",
-    "post_format": "cost_or_perf_numbers"
-  },
-  {
     "topic": "Agentic Orchestration",
     "category": "Enterprise AI",
     "date": "2026-10-16",
@@ -158,5 +151,12 @@
     "date": "2026-11-03",
     "diagram_style": "concept",
     "post_format": "common_mistake"
+  },
+  {
+    "topic": "AgenticAI_vs_RuleEngine",
+    "category": "Enterprise AI",
+    "date": "2026-11-04",
+    "diagram_style": "architecture",
+    "post_format": "x_vs_y"
   }
 ]
