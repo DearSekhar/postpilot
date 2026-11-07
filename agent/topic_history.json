@@ -1,14 +1,5 @@
 [
   {
-    "topic": "Checkout recommendation vector search",
-    "category": "Enterprise AI",
-    "date": "2026-10-18",
-    "industry": "Retail & E-commerce",
-    "problem_id": "retail_personalization_latency",
-    "diagram_style": "concept",
-    "post_format": "industry_problem"
-  },
-  {
     "topic": "FHIR normalization pipeline",
     "category": "Azure Integration",
     "date": "2026-10-19",
@@ -158,5 +149,12 @@
     "date": "2026-11-06",
     "diagram_style": "concept",
     "post_format": "cost_or_perf_numbers"
+  },
+  {
+    "topic": "Agentic underwriting vs rule engine",
+    "category": "Enterprise AI",
+    "date": "2026-11-07",
+    "diagram_style": "architecture",
+    "post_format": "contrarian_take"
   }
 ]
