@@ -1,14 +1,5 @@
 [
   {
-    "topic": "FHIR normalization pipeline",
-    "category": "Azure Integration",
-    "date": "2026-10-19",
-    "industry": "Healthcare",
-    "problem_id": "healthcare_interop",
-    "diagram_style": "architecture",
-    "post_format": "industry_problem"
-  },
-  {
     "topic": "RAG loan product matching",
     "category": "Enterprise AI",
     "date": "2026-10-20",
@@ -156,5 +147,12 @@
     "date": "2026-11-07",
     "diagram_style": "architecture",
     "post_format": "contrarian_take"
+  },
+  {
+    "topic": "Cost-aware scaling for Azure Functions",
+    "category": "Cloud Architecture",
+    "date": "2026-11-08",
+    "diagram_style": "hierarchy",
+    "post_format": "numbered_lessons"
   }
 ]
