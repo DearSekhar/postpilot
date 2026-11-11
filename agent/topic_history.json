@@ -1,14 +1,5 @@
 [
   {
-    "topic": "Regulatory reporting pipeline",
-    "category": "Cloud Architecture",
-    "date": "2026-10-22",
-    "industry": "Banking & Payments",
-    "problem_id": "finance_regulatory_reporting",
-    "diagram_style": "hierarchy",
-    "post_format": "industry_problem"
-  },
-  {
     "topic": "Static Service Bus keys",
     "category": "Distributed Systems",
     "date": "2026-10-23",
@@ -153,6 +144,15 @@
     "industry": "Healthcare",
     "problem_id": "healthcare_claims_backlog",
     "diagram_style": "architecture",
+    "post_format": "industry_problem"
+  },
+  {
+    "topic": "Document Ingestion Hub",
+    "category": "Azure Integration",
+    "date": "2026-11-11",
+    "industry": "Mortgage & Lending",
+    "problem_id": "borrowers_upload_required_documents_through",
+    "diagram_style": "hierarchy",
     "post_format": "industry_problem"
   }
 ]
