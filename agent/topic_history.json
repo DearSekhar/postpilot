@@ -1,12 +1,5 @@
 [
   {
-    "topic": "Service Bus cost pruning",
-    "category": "Performance & Observability",
-    "date": "2026-10-26",
-    "diagram_style": "concept",
-    "post_format": "cost_or_perf_numbers"
-  },
-  {
     "topic": "Edge inference over central LLMs",
     "category": "Cloud Architecture",
     "date": "2026-10-27",
@@ -158,5 +151,12 @@
     "date": "2026-11-14",
     "diagram_style": "concept",
     "post_format": "common_mistake"
+  },
+  {
+    "topic": "EDI_vs_EventDrivenAPI",
+    "category": "Azure Integration",
+    "date": "2026-11-15",
+    "diagram_style": "architecture",
+    "post_format": "x_vs_y"
   }
 ]
