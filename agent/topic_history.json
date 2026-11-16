@@ -1,12 +1,5 @@
 [
   {
-    "topic": "Edge inference over central LLMs",
-    "category": "Cloud Architecture",
-    "date": "2026-10-27",
-    "diagram_style": "architecture",
-    "post_format": "contrarian_take"
-  },
-  {
     "topic": "LLM Observability for Mortgage underwriting",
     "category": "Performance & Observability",
     "date": "2026-10-28",
@@ -158,5 +151,12 @@
     "date": "2026-11-15",
     "diagram_style": "architecture",
     "post_format": "x_vs_y"
+  },
+  {
+    "topic": "Fine-tuning vs Prompt Engineering Myth",
+    "category": "Cloud Architecture",
+    "date": "2026-11-16",
+    "diagram_style": "hierarchy",
+    "post_format": "myth_vs_reality"
   }
 ]
