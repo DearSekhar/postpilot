@@ -1,14 +1,5 @@
 [
   {
-    "topic": "Dynamic product copy generation",
-    "category": "Enterprise AI",
-    "date": "2026-10-29",
-    "industry": "Retail & E-commerce",
-    "problem_id": "fast_fashion_e_commerce_sites",
-    "diagram_style": "concept",
-    "post_format": "industry_problem"
-  },
-  {
     "topic": "Predictive No-Show Management",
     "category": "Enterprise AI",
     "date": "2026-10-30",
@@ -158,5 +149,12 @@
     "date": "2026-11-17",
     "diagram_style": "concept",
     "post_format": "cost_or_perf_numbers"
+  },
+  {
+    "topic": "LLMOps Strategy Choice",
+    "category": "Enterprise AI",
+    "date": "2026-11-19",
+    "diagram_style": "architecture",
+    "post_format": "contrarian_take"
   }
 ]
