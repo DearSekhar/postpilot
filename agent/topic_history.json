@@ -1,14 +1,5 @@
 [
   {
-    "topic": "Strangler Integration for Mortgage Servicing",
-    "category": "Azure Integration",
-    "date": "2026-10-31",
-    "industry": "Mortgage & Lending",
-    "problem_id": "mortgage_legacy_middleware_retirement",
-    "diagram_style": "hierarchy",
-    "post_format": "industry_problem"
-  },
-  {
     "topic": "AI-powered product data enrichment",
     "category": "Enterprise AI",
     "date": "2026-11-01",
@@ -154,5 +145,14 @@
     "date": "2026-11-20",
     "diagram_style": "hierarchy",
     "post_format": "numbered_lessons"
+  },
+  {
+    "topic": "Vector catalog search",
+    "category": "Enterprise AI",
+    "date": "2026-11-21",
+    "industry": "Retail & E-commerce",
+    "problem_id": "a_fashion_e_commerce_site",
+    "diagram_style": "concept",
+    "post_format": "industry_problem"
   }
 ]
