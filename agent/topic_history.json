@@ -1,14 +1,5 @@
 [
   {
-    "topic": "AI-powered product data enrichment",
-    "category": "Enterprise AI",
-    "date": "2026-11-01",
-    "industry": "Consumer Packaged Goods & Food Manufacturing",
-    "problem_id": "cpg_product_data_enrichment",
-    "diagram_style": "architecture",
-    "post_format": "industry_problem"
-  },
-  {
     "topic": "Legacy Core API Layer",
     "category": "Azure Integration",
     "date": "2026-11-02",
@@ -153,6 +144,15 @@
     "industry": "Retail & E-commerce",
     "problem_id": "a_fashion_e_commerce_site",
     "diagram_style": "concept",
+    "post_format": "industry_problem"
+  },
+  {
+    "topic": "Predictive No-Show Reminders",
+    "category": "Enterprise AI",
+    "date": "2026-11-22",
+    "industry": "Healthcare",
+    "problem_id": "healthcare_appointment_noshow",
+    "diagram_style": "architecture",
     "post_format": "industry_problem"
   }
 ]
