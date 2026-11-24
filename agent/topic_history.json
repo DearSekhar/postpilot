@@ -1,14 +1,5 @@
 [
   {
-    "topic": "Legacy Core API Layer",
-    "category": "Azure Integration",
-    "date": "2026-11-02",
-    "industry": "Banking & Payments",
-    "problem_id": "finance_legacy_core_integration",
-    "diagram_style": "hierarchy",
-    "post_format": "industry_problem"
-  },
-  {
     "topic": "Event Grid as queue",
     "category": "Distributed Systems",
     "date": "2026-11-03",
@@ -153,6 +144,15 @@
     "industry": "Healthcare",
     "problem_id": "healthcare_appointment_noshow",
     "diagram_style": "architecture",
+    "post_format": "industry_problem"
+  },
+  {
+    "topic": "Event-driven borrower notifications",
+    "category": "Azure Integration",
+    "date": "2026-11-24",
+    "industry": "Mortgage & Lending",
+    "problem_id": "mortgage_servicing_notifications",
+    "diagram_style": "hierarchy",
     "post_format": "industry_problem"
   }
 ]
