@@ -1,12 +1,5 @@
 [
   {
-    "topic": "LLM CPU vs GPU myth",
-    "category": "Cloud Architecture",
-    "date": "2026-11-05",
-    "diagram_style": "hierarchy",
-    "post_format": "myth_vs_reality"
-  },
-  {
     "topic": "API Management cost vs self-hosted gateway",
     "category": "Distributed Systems",
     "date": "2026-11-06",
@@ -158,5 +151,12 @@
     "problem_id": "finance_fraud_latency",
     "diagram_style": "hierarchy",
     "post_format": "industry_problem"
+  },
+  {
+    "topic": "common_mistake \u2014 idle Service Bus subscriptions",
+    "category": "Cloud Architecture",
+    "date": "2026-11-27",
+    "diagram_style": "concept",
+    "post_format": "common_mistake"
   }
 ]
